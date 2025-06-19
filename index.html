@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Title for the browser tab -->
     <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- NEW: Google Font for minimalist look (Inter) -->
+    <!-- NEW FONT: Lato (lean and modern) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -22,37 +20,62 @@
         -------------------
         */
         :root {
-            --bg-color-start: #000000; /* Black */
-            --bg-color-end: #2a0000; /* Dark Red */
-            --primary-accent: #ff1b4f; /* Neon Red */
-            --text-color: #e0e0e0; /* Light Gray/Off-white */
-            --text-muted: #a0a0a0; /* Muted Gray for subtitles */
-            --card-bg: rgba(20, 20, 20, 0.4); /* Darker, less transparent card */
+            --bg-color-start: #000000; /* Black (Prime) */
+            --bg-color-mid: #4d0000; /* Dark Red */
+            --bg-color-end: #6b2100; /* Dark Orange */
+            --primary-accent: #ff4d4d; /* Bright, clean red */
+            --text-color: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --card-bg: rgba(20, 20, 20, 0.5);
+            /* JS will update these for the mouse glow */
+            --mouse-x: 50%; 
+            --mouse-y: 50%;
         }
 
         /* Basic Setup with new font */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Lato', sans-serif;
             font-weight: 400;
             line-height: 1.7;
             color: var(--text-color);
             background-color: var(--bg-color-start);
-            background-image: linear-gradient(135deg, var(--bg-color-start) 0%, var(--bg-color-end) 100%);
+            /* NEW: 3-color gradient & interactive mouse glow */
+            background-image: 
+                radial-gradient(
+                    circle 600px at var(--mouse-x) var(--mouse-y),
+                    rgba(255, 77, 77, 0.1),
+                    transparent 80%
+                ),
+                linear-gradient(135deg, var(--bg-color-start) 20%, var(--bg-color-mid) 65%, var(--bg-color-end) 100%);
             background-attachment: fixed;
             margin: 0;
             padding: 0;
+            overflow-x: hidden; /* Hide horizontal scrollbar caused by glows */
+        }
+        
+        /* NEW: Static diffused glow effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 77, 77, 0.2), transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(255, 100, 50, 0.15), transparent 40%);
+            filter: blur(80px);
         }
 
-        /* Updated heading styles for minimalist look */
         h1, h2, h3 {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Lato', sans-serif;
             color: var(--primary-accent);
-            text-shadow: none; /* Removed shadow for cleaner look */
+            text-shadow: none;
         }
         h1 { font-weight: 700; }
         h2 { font-weight: 700; }
-        h3 { font-weight: 600; }
-
+        h3 { font-weight: 700; }
 
         .container {
             max-width: 960px;
@@ -72,43 +95,54 @@
         /* Header Section with Profile Picture */
         .header {
             text-align: center;
-            padding: 4rem 1rem 5rem 1rem; /* Adjusted padding */
+            padding: 4rem 1rem 5rem 1rem;
         }
         
-        /* NEW: Profile Picture Style */
+        /* NEW: Square Profile Picture Style */
         .profile-picture {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%; /* Makes the image a circle */
-            border: 4px solid var(--primary-accent);
-            object-fit: cover; /* Prevents the image from stretching */
-            margin: 0 auto 30px auto; /* Centers the image and adds space below */
-            box-shadow: 0 0 25px rgba(255, 27, 79, 0.4);
+            width: 160px;
+            height: 160px;
+            border-radius: 12px; /* Rounded square */
+            border: 3px solid var(--primary-accent);
+            object-fit: cover;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 0 25px rgba(255, 77, 77, 0.4);
         }
 
         .header h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin: 0;
-            letter-spacing: -1px; /* Tighter letter-spacing for Inter */
+            letter-spacing: -1px;
         }
         .header .tagline {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
-            font-family: 'Inter', sans-serif;
+            font-weight: 300; /* Lighter weight for tagline */
         }
 
         /* Sections */
         section {
             padding: 50px 20px;
-            border-bottom: 1px solid rgba(255, 27, 79, 0.2);
+            border-bottom: 1px solid rgba(255, 77, 77, 0.15);
         }
         section:last-of-type {
             border-bottom: none;
         }
         section h2 {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 50px;
+        }
+        
+        /* NEW: JS Fade-in Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* About Me Section */
@@ -117,7 +151,6 @@
             text-align: center;
             max-width: 750px;
             margin: 0 auto;
-            color: var(--text-color);
         }
 
         /* Experience Section (Timeline) */
@@ -129,8 +162,8 @@
         .timeline::after {
             content: '';
             position: absolute;
-            width: 2px; /* Thinner line */
-            background-color: rgba(255, 27, 79, 0.3);
+            width: 2px;
+            background-color: rgba(255, 77, 77, 0.3);
             top: 0;
             bottom: 0;
             left: 50%;
@@ -154,39 +187,9 @@
             border-radius: 50%;
             z-index: 1;
         }
-        .timeline-item.left {
-            left: 0;
-        }
-        .timeline-item.right {
-            left: 50%;
-        }
-        .timeline-item.left::before {
-            content: " ";
-            height: 0;
-            position: absolute;
-            top: 22px;
-            width: 0;
-            z-index: 1;
-            right: 30px;
-            border: medium solid var(--card-bg); /* Match card background */
-            border-width: 10px 0 10px 10px;
-            border-color: transparent transparent transparent var(--card-bg);
-        }
-        .timeline-item.right::before {
-            content: " ";
-            height: 0;
-            position: absolute;
-            top: 22px;
-            width: 0;
-            z-index: 1;
-            left: 30px;
-            border: medium solid var(--card-bg); /* Match card background */
-            border-width: 10px 10px 10px 0;
-            border-color: transparent var(--card-bg) transparent transparent;
-        }
-        .timeline-item.right::after {
-            left: -8px;
-        }
+        .timeline-item.left { left: 0; }
+        .timeline-item.right { left: 50%; }
+        .timeline-item.right::after { left: -8px; }
         .timeline-content {
             padding: 20px 30px;
             background: var(--card-bg);
@@ -197,7 +200,6 @@
         }
         .timeline-content .date {
             font-size: 0.9em;
-            font-weight: 600;
             color: var(--text-muted);
             margin-bottom: 10px;
             display: block;
@@ -214,15 +216,10 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 25px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
             backdrop-filter: blur(8px);
         }
-        .portfolio-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 0 20px rgba(255, 27, 79, 0.4);
-        }
 
-        /* Expertise/Skills Section */
+        /* Skills Section */
         .skills-list {
             list-style: none;
             padding: 0;
@@ -234,31 +231,24 @@
         .skills-list li {
             background: transparent;
             padding: 10px 20px;
-            border-radius: 5px; /* Less rounded for a sharper look */
+            border-radius: 5px;
             border: 1px solid var(--primary-accent);
             color: var(--primary-accent);
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
+            font-weight: 400;
             transition: all 0.3s ease;
         }
         .skills-list li:hover {
             background: var(--primary-accent);
-            color: #fff;
+            color: #000;
         }
 
         /* Contact Section */
-        .contact-info {
-            text-align: center;
-        }
-        .contact-info p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
+        .contact-info { text-align: center; }
+        .contact-info p { font-size: 1.1rem; margin-bottom: 30px; }
         .social-links a {
             font-size: 2.5rem;
             color: var(--text-color);
             margin: 0 20px;
-            text-decoration: none;
             transition: color 0.3s ease, transform 0.3s ease;
         }
         .social-links a:hover {
@@ -270,161 +260,82 @@
         footer {
             text-align: center;
             padding: 20px;
-            background: var(--bg-color-start);
+            background: transparent;
             color: var(--text-muted);
             font-size: 0.9rem;
         }
         
         /* Responsive Design */
         @media screen and (max-width: 768px) {
-            .timeline::after {
-                left: 31px;
-            }
-            .timeline-item {
-                width: 100%;
-                padding-left: 70px;
-                padding-right: 25px;
-            }
-            .timeline-item.left::before, .timeline-item.right::before {
-                left: 60px;
-                border: medium solid var(--card-bg);
-                border-width: 10px 10px 10px 0;
-                border-color: transparent var(--card-bg) transparent transparent;
-            }
-            .timeline-item.left::after, .timeline-item.right::after {
-                left: 23px;
-            }
-            .timeline-item.right {
-                left: 0%;
-            }
-            .header h1 {
-                font-size: 2.2rem;
-            }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item.right { left: 0%; }
+            .timeline-item.left::after, .timeline-item.right::after { left: 23px; }
+            .header h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ================== -->
-    <!-- HEADER SECTION -->
-    <!-- ================== -->
     <header class="header">
-        <!-- NEW: Profile Picture -->
         <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture">
-        
         <h1>Sayan Chakraborty</h1>
         <p class="tagline">Technical Writer | SaaS • Web3 • Tech • Gaming</p>
     </header>
 
     <main class="container">
 
-        <!-- ================== -->
-        <!-- ABOUT ME SECTION -->
-        <!-- ================== -->
-        <section id="about">
+        <section id="about" class="fade-in">
             <h2>About Me</h2>
             <p>
-                A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities in domains where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.
+                A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.
             </p>
         </section>
 
-        <!-- ==================== -->
-        <!-- EXPERIENCE SECTION -->
-        <!-- ==================== -->
-        <section id="experience">
+        <section id="experience" class="fade-in">
             <h2>Work Experience</h2>
             <div class="timeline">
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <h3>Technical Content Writer</h3>
-                        <span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span>
-                        <p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p>
-                    </div>
-                </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content">
-                        <h3>Technical Content & Copywriter</h3>
-                        <span class="date">Idea Usher | Dec 2022 - Aug 2023</span>
-                        <p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p>
-                    </div>
-                </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <h3>Content Writer</h3>
-                        <span class="date">NFTICALLY | Sep 2021 - Sep 2022</span>
-                        <p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p>
-                    </div>
-                </div>
-                <div class="timeline-item right">
-                    <div class="timeline-content">
-                        <h3>Freelance Creative Writer</h3>
-                        <span class="date">Fandomical | Jan 2021 - Nov 2021</span>
-                        <p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p>
-                    </div>
-                </div>
-                <div class="timeline-item left">
-                    <div class="timeline-content">
-                        <h3>Academic Content Writer</h3>
-                        <span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span>
-                        <p>Produced high-quality academic content, honing research and formal writing skills.</p>
-                    </div>
-                </div>
+                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div>
+                <div class="timeline-item right fade-in"><div class="timeline-content"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div>
+                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div>
+                <div class="timeline-item right fade-in"><div class="timeline-content"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div>
+                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div>
             </div>
         </section>
 
-
-        <!-- ==================== -->
-        <!-- PORTFOLIO SECTION -->
-        <!-- ==================== -->
-        <section id="portfolio">
+        <section id="portfolio" class="fade-in">
             <h2>My Work</h2>
             <div class="portfolio-grid">
-                <!-- Add links to your best work here -->
-                <div class="portfolio-item">
+                <!-- NEW PORTFOLIO ITEM -->
+                <div class="portfolio-item fade-in">
+                    <h3>Magento 2 CMS Page Hierarchy Tutorial</h3>
+                    <p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p>
+                    <a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a>
+                </div>
+                <div class="portfolio-item fade-in">
                     <h3>Building a Successful Femtech App</h3>
                     <p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p>
                     <a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a>
                 </div>
-                <div class="portfolio-item">
+                <div class="portfolio-item fade-in">
                     <h3>Why "Mental Flossing" is Your Last Hope?</h3>
                     <p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p>
                     <a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a>
                 </div>
-                <div class="portfolio-item">
-                    <h3>My Full Portfolio Document</h3>
-                    <p>A comprehensive document showcasing a wider range of my projects and capabilities.</p>
-                    <a href="https://docs.google.com/document/d/1BfVv1S41Q2wW9SgR7j7PzF0L-6Yx3n5k/edit?usp=sharing&ouid=113401569426915383501&rtpof=true&sd=true" target="_blank">View Full Portfolio →</a>
-                </div>
             </div>
         </section>
 
-        <!-- ================== -->
-        <!-- SKILLS SECTION -->
-        <!-- ================== -->
-        <section id="skills">
+        <section id="skills" class="fade-in">
             <h2>Expertise</h2>
             <ul class="skills-list">
-                <li>Technical Content</li>
-                <li>SEO Strategy</li>
-                <li>SaaS & Web3</li>
-                <li>Copywriting</li>
-                <li>Content Marketing</li>
-                <li>Critical Research</li>
-                <li>AI Proficiency</li>
-                <li>Graphics Designing</li>
-                <li>Email Marketing</li>
+                <li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li>
             </ul>
         </section>
 
-        <!-- ================== -->
-        <!-- CONTACT SECTION -->
-        <!-- ================== -->
-        <section id="contact">
+        <section id="contact" class="fade-in">
             <h2>Get In Touch</h2>
             <div class="contact-info">
-                <p>
-                    Currently open to freelance opportunities and collaborations. Let's create something great together!
-                </p>
+                <p>I'm open to freelance opportunities and collaborations. Let's create something great together!</p>
                 <div class="social-links">
                     <a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
                     <a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -432,15 +343,51 @@
                 </div>
             </div>
         </section>
-
     </main>
     
-    <!-- ================== -->
-    <!-- FOOTER SECTION   -->
-    <!-- ================== -->
     <footer>
         <p>© 2024 Sayan Chakraborty. Crafted with passion.</p>
     </footer>
+
+    <!-- ================== -->
+    <!-- JAVASCRIPT SECTION -->
+    <!-- ================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Interactive Mouse Glow Effect ---
+            document.addEventListener('mousemove', e => {
+                // Update the CSS custom properties with the mouse coordinates
+                document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+                document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+            });
+
+            // --- Scroll Fade-In Animation ---
+            const fadeInElements = document.querySelectorAll('.fade-in');
+
+            const observerOptions = {
+                root: null, // observes intersections relative to the viewport
+                rootMargin: '0px',
+                threshold: 0.1 // trigger when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Stop observing the element once it's visible to save resources
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Attach the observer to each fade-in element
+            fadeInElements.forEach(el => {
+                observer.observe(el);
+            });
+            
+        });
+    </script>
 
 </body>
 </html>
