@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- EDIT THE TITLE BELOW -->
-    <title>Jane Doe | Content Writer & Strategist</title>
+    <!-- Title for the browser tab -->
+    <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- Google Fonts for a professional look -->
+    <!-- Google Fonts for a modern, clean look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -18,70 +18,174 @@
     <style>
         /* 
         -------------------
-        EASY-TO-EDIT STYLES
+        STYLES
         -------------------
-        You can change the main colors of your site here.
         */
         :root {
-            --primary-color: #2c3e50; /* Dark Blue/Charcoal */
-            --secondary-color: #3498db; /* Bright Blue */
-            --background-color: #ecf0f1; /* Light Gray */
-            --text-color: #34495e; /* Dark Gray */
-            --header-text-color: #ffffff; /* White */
+            --bg-color-start: #000000; /* Black */
+            --bg-color-end: #2a0000; /* Dark Red */
+            --primary-accent: #ff1b4f; /* Neon Red */
+            --text-color: #e0e0e0; /* Light Gray/Off-white */
+            --text-muted: #a0a0a0; /* Muted Gray for subtitles */
+            --card-bg: rgba(15, 15, 15, 0.5); /* Semi-transparent dark background */
         }
 
         /* Basic Setup */
         body {
-            font-family: 'Merriweather', serif;
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
             color: var(--text-color);
-            background-color: var(--background-color);
+            background-color: var(--bg-color-start);
+            background-image: linear-gradient(135deg, var(--bg-color-start) 0%, var(--bg-color-end) 100%);
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
         }
 
         h1, h2, h3 {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Roboto Mono', monospace;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--primary-accent);
+            text-shadow: 0 0 4px rgba(255, 27, 79, 0.5);
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
             padding: 20px;
         }
 
+        a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #ffffff;
+        }
+
         /* Header Section */
         .header {
-            background-color: var(--primary-color);
-            color: var(--header-text-color);
-            padding: 4rem 1rem;
             text-align: center;
+            padding: 6rem 1rem;
         }
         .header h1 {
             font-size: 3rem;
             margin: 0;
-            color: var(--header-text-color);
+            letter-spacing: 2px;
         }
         .header .tagline {
             font-size: 1.2rem;
-            color: var(--header-text-color);
-            opacity: 0.9;
+            color: var(--text-muted);
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Sections */
         section {
-            padding: 40px 20px;
-            border-bottom: 1px solid #bdc3c7;
+            padding: 50px 20px;
+            border-bottom: 1px solid rgba(255, 27, 79, 0.2);
         }
         section:last-of-type {
             border-bottom: none;
         }
         section h2 {
             text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 40px;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+        }
+
+        /* About Me Section */
+        #about p {
+            font-size: 1.1rem;
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* Experience Section (Timeline) */
+        .timeline {
+            position: relative;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: rgba(255, 27, 79, 0.3);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1.5px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--bg-color-start);
+            border: 4px solid var(--primary-accent);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-item.left {
+            left: 0;
+        }
+        .timeline-item.right {
+            left: 50%;
+        }
+        .timeline-item.left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--primary-accent);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--primary-accent);
+        }
+        .timeline-item.right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--primary-accent);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--primary-accent) transparent transparent;
+        }
+        .timeline-item.right::after {
+            left: -10px;
+        }
+        .timeline-content {
+            padding: 20px 30px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 27, 79, 0.3);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+        .timeline-content h3 {
+            margin-top: 0;
+        }
+        .timeline-content .date {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: block;
         }
 
         /* Portfolio Section */
@@ -91,32 +195,23 @@
             gap: 30px;
         }
         .portfolio-item {
-            background: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 27, 79, 0.3);
+            border-radius: 8px;
+            padding: 25px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         .portfolio-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(255, 27, 79, 0.5);
         }
         .portfolio-item h3 {
             margin-top: 0;
-            color: var(--secondary-color);
-        }
-        .portfolio-item a {
-            text-decoration: none;
-            color: var(--secondary-color);
-            font-weight: bold;
-            font-family: 'Montserrat', sans-serif;
-        }
-        .portfolio-item a:hover {
-            text-decoration: underline;
         }
 
-        /* Services Section */
-        .services-list {
+        /* Expertise/Skills Section */
+        .skills-list {
             list-style: none;
             padding: 0;
             display: flex;
@@ -124,14 +219,19 @@
             justify-content: center;
             gap: 15px;
         }
-        .services-list li {
-            background: #ffffff;
+        .skills-list li {
+            background: transparent;
             padding: 10px 20px;
             border-radius: 20px;
-            border: 2px solid var(--secondary-color);
-            color: var(--secondary-color);
-            font-family: 'Montserrat', sans-serif;
+            border: 2px solid var(--primary-accent);
+            color: var(--primary-accent);
+            font-family: 'Roboto Mono', monospace;
             font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .skills-list li:hover {
+            background: var(--primary-accent);
+            color: #fff;
         }
 
         /* Contact Section */
@@ -143,23 +243,48 @@
             margin-bottom: 30px;
         }
         .social-links a {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin: 0 15px;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            margin: 0 20px;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         .social-links a:hover {
-            color: var(--secondary-color);
+            color: var(--primary-accent);
+            transform: scale(1.1);
         }
 
         /* Footer */
         footer {
             text-align: center;
             padding: 20px;
-            background: var(--primary-color);
-            color: var(--header-text-color);
+            background: var(--bg-color-start);
+            color: var(--text-muted);
             font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item.left::before, .timeline-item.right::before {
+                left: 60px;
+                border: medium solid var(--primary-accent);
+                border-width: 10px 10px 10px 0;
+                border-color: transparent var(--primary-accent) transparent transparent;
+            }
+            .timeline-item.left::after, .timeline-item.right::after {
+                left: 21px;
+            }
+            .timeline-item.right {
+                left: 0%;
+            }
         }
     </style>
 </head>
@@ -169,10 +294,8 @@
     <!-- HEADER SECTION -->
     <!-- ================== -->
     <header class="header">
-        <!-- YOUR NAME -->
-        <h1>Jane Doe</h1>
-        <!-- YOUR TAGLINE -->
-        <p class="tagline">Crafting Words That Convert, Connect, and Captivate</p>
+        <h1>Sayan Chakraborty</h1>
+        <p class="tagline">Technical Writer | SaaS • Web3 • Tech • Gaming</p>
     </header>
 
     <main class="container">
@@ -182,55 +305,97 @@
         <!-- ================== -->
         <section id="about">
             <h2>About Me</h2>
-            <!-- YOUR BIO -->
             <p>
-                Hello! I'm Jane, a professional content writer and strategist with over 5 years of experience helping brands tell their stories. My passion is turning complex ideas into clear, compelling content that engages audiences and drives results. Whether it's a blog post, website copy, or a full content strategy, I focus on creating value for your readers and your business.
+                A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities in domains where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.
             </p>
         </section>
 
         <!-- ==================== -->
-        <!-- MY PORTFOLIO SECTION -->
+        <!-- EXPERIENCE SECTION -->
+        <!-- ==================== -->
+        <section id="experience">
+            <h2>Work Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Technical Content Writer</h3>
+                        <span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span>
+                        <p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Technical Content & Copywriter</h3>
+                        <span class="date">Idea Usher | Dec 2022 - Aug 2023</span>
+                        <p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Content Writer</h3>
+                        <span class="date">NFTICALLY | Sep 2021 - Sep 2022</span>
+                        <p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>Freelance Creative Writer</h3>
+                        <span class="date">Fandomical | Jan 2021 - Nov 2021</span>
+                        <p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>Academic Content Writer</h3>
+                        <span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span>
+                        <p>Produced high-quality academic content, honing research and formal writing skills.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== -->
+        <!-- PORTFOLIO SECTION -->
         <!-- ==================== -->
         <section id="portfolio">
             <h2>My Work</h2>
             <div class="portfolio-grid">
-                <!-- PORTFOLIO ITEM 1 -->
+                <!-- Add links to your best work here -->
                 <div class="portfolio-item">
-                    <h3>How to Boost SEO with Long-Form Content</h3>
-                    <p>An in-depth guide written for a major marketing blog, which increased their organic traffic by 25%.</p>
-                    <a href="#" target="_blank">Read Article →</a>
+                    <h3>Building a Successful Femtech App</h3>
+                    <p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p>
+                    <a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a>
                 </div>
-                
-                <!-- PORTFOLIO ITEM 2 -->
                 <div class="portfolio-item">
-                    <h3>Complete Website Copy for Tech Startup</h3>
-                    <p>Wrote all customer-facing copy for a new SaaS product, focusing on a clear and persuasive brand voice.</p>
-                    <a href="#" target="_blank">View Website →</a>
+                    <h3>Why "Mental Flossing" is Your Last Hope?</h3>
+                    <p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p>
+                    <a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a>
                 </div>
-
-                <!-- PORTFOLIO ITEM 3 -->
                 <div class="portfolio-item">
-                    <h3>E-commerce Product Descriptions</h3>
-                    <p>Crafted over 50 product descriptions for an online fashion retailer, leading to a 15% increase in conversions.</p>
-                    <a href="#" target="_blank">See Examples →</a>
+                    <h3>My Full Portfolio Document</h3>
+                    <p>A comprehensive document showcasing a wider range of my projects and capabilities.</p>
+                    <!-- Replace '#' with the public link to your portfolio PDF/document -->
+                    <a href="#" target="_blank">View Full Portfolio →</a>
                 </div>
-                <!-- Add more portfolio items by copying the block above -->
             </div>
         </section>
 
         <!-- ================== -->
-        <!-- SERVICES SECTION -->
+        <!-- SKILLS SECTION -->
         <!-- ================== -->
-        <section id="services">
-            <h2>Services</h2>
-            <!-- LIST YOUR SERVICES HERE -->
-            <ul class="services-list">
-                <li>SEO Blog Writing</li>
-                <li>Website Copywriting</li>
-                <li>Email Newsletters</li>
-                <li>Content Strategy</li>
-                <li>Case Studies</li>
-                <li>Social Media Content</li>
+        <section id="skills">
+            <h2>Expertise</h2>
+            <ul class="skills-list">
+                <li>Technical Content</li>
+                <li>SEO Strategy</li>
+                <li>SaaS & Web3</li>
+                <li>Copywriting</li>
+                <li>Content Marketing</li>
+                <li>Critical Research</li>
+                <li>AI Proficiency</li>
+                <li>Graphics Designing</li>
+                <li>Email Marketing</li>
             </ul>
         </section>
 
@@ -241,15 +406,12 @@
             <h2>Get In Touch</h2>
             <div class="contact-info">
                 <p>
-                    I'm currently available for freelance projects. If you're looking for a writer who can deliver high-quality content on schedule, I'd love to hear from you!
+                    I'm open to freelance opportunities and collaborations. Let's create something great together!
                 </p>
                 <div class="social-links">
-                    <!-- REPLACE WITH YOUR EMAIL -->
-                    <a href="mailto:your.email@example.com" title="Email"><i class="fas fa-envelope"></i></a>
-                    <!-- REPLACE WITH YOUR LINKEDIN URL -->
-                    <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <!-- REPLACE WITH YOUR TWITTER/X URL (or other relevant social media) -->
-                    <a href="https://twitter.com/yourhandle" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+                    <a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a>
                 </div>
             </div>
         </section>
@@ -260,8 +422,7 @@
     <!-- FOOTER SECTION   -->
     <!-- ================== -->
     <footer>
-        <!-- YOUR NAME AND CURRENT YEAR -->
-        <p>© 2024 Jane Doe. All rights reserved.</p>
+        <p>© 2024 Sayan Chakraborty. Crafted with passion.</p>
     </footer>
 
 </body>
