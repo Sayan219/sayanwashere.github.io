@@ -13,11 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* 
-        -------------------
-        STYLES WITH THEME TOGGLE
-        -------------------
-        */
         :root {
             /* DARK MODE (Default) */
             --bg-color-start: #000000;
@@ -30,13 +25,13 @@
             --toggle-icon-color: #f0f0f0;
         }
 
-        /* NEW: LIGHT MODE THEME */
         body.light-mode {
-            --bg-color-start: #f4f4f4; /* Off-white */
-            --bg-color-end: #e0e0e0;   /* Metallic Grey */
+            /* LIGHT MODE THEME */
+            --bg-color-start: #f4f4f4;
+            --bg-color-end: #e0e0e0;
             --primary-accent: #007bff; /* Professional Blue */
-            --text-color: #212529;   /* Dark Charcoal */
-            --text-muted: #6c757d;  /* Mid Grey */
+            --text-color: #212529;
+            --text-muted: #6c757d;
             --card-bg: rgba(255, 255, 255, 0.6);
             --toggle-bg: rgba(255, 255, 255, 0.8);
             --toggle-icon-color: #212529;
@@ -53,7 +48,8 @@
             font-family: 'Lato', sans-serif;
             color: var(--text-color);
             background-color: var(--bg-color-start);
-            background-image: linear-gradient(135deg, var(--bg-color-start) 70%, var(--bg-color-end) 100%);
+            /* Gradient adjusted to match screenshot aesthetic */
+            background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
             background-attachment: fixed;
             margin: 0; padding: 0;
             overflow-x: hidden;
@@ -70,14 +66,10 @@
 
         #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         
-        /* NEW: Theme Toggle Button */
         #theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
+            position: fixed; top: 20px; right: 20px;
             z-index: 1000;
-            width: 45px;
-            height: 45px;
+            width: 45px; height: 45px;
             background-color: var(--toggle-bg);
             backdrop-filter: blur(5px);
             border: 1px solid color-mix(in srgb, var(--primary-accent) 30%, transparent);
@@ -85,19 +77,13 @@
             color: var(--toggle-icon-color);
             font-size: 1.2rem;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; align-items: center;
             transition: all 0.3s ease;
         }
-        #theme-toggle:hover {
-            transform: scale(1.1);
-            border-color: var(--primary-accent);
-        }
-        /* Icon visibility logic */
+        #theme-toggle:hover { transform: scale(1.1); border-color: var(--primary-accent); }
         #theme-toggle .fa-sun { display: none; }
         body.light-mode #theme-toggle .fa-moon { display: none; }
         body.light-mode #theme-toggle .fa-sun { display: block; }
-
 
         h1, h2, h3 { font-family: 'Lato', sans-serif; color: var(--primary-accent); text-shadow: none; font-weight: 700; }
         .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
@@ -153,12 +139,7 @@
 </head>
 <body>
     
-    <!-- NEW: Theme Toggle Button -->
-    <button id="theme-toggle" title="Toggle theme">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun"></i>
-    </button>
-
+    <button id="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
     <div id="firefly-container"></div>
     <canvas id="particle-canvas"></canvas>
 
@@ -169,7 +150,7 @@
     </header>
 
     <main class="container">
-        <!-- Content Sections Remain Unchanged -->
+        <!-- Content Sections -->
         <section id="about" class="fade-in"><h2>About Me</h2><p>A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.</p></section>
         <section id="experience" class="fade-in"><h2>Work Experience</h2><div class="timeline"><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div></div></section>
         <section id="portfolio" class="fade-in"><h2>My Work</h2><div class="portfolio-grid"><div class="portfolio-item tilt-card fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a></div><div class="portfolio-item tilt-card fade-in"><h3>The Ultimate Guide to Web3 Wallets</h3><p>A beginner-friendly but comprehensive guide explaining the types and security of Web3 crypto wallets.</p><a href="#" target="_blank">Read Guide →</a></div><div class="portfolio-item tilt-card fade-in"><h3>API Documentation Best Practices</h3><p>A detailed article for developers and technical writers on creating clear, effective API documentation.</p><a href="#" target="_blank">View Practices →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Content Strategy for B2B SaaS</h3><p>Exploring high-level strategies for using content to drive lead generation and user retention for SaaS companies.</p><a href="#" target="_blank">Read Strategy →</a></div></div></section>
@@ -179,33 +160,41 @@
     <footer><p>© 2024 Sayan Chakraborty. Crafted with passion.</p></footer>
 
     <script>
+        // CORRECTED, FULLY-FUNCTIONAL SCRIPT BLOCK
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
 
-            // --- NEW: Theme Toggle Logic ---
-            // On page load, check for saved theme
+            // Theme Toggle Logic
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 body.classList.add(savedTheme + '-mode');
             }
-
-            // Toggle theme on button click
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
-                // Save the new theme preference
                 if (body.classList.contains('light-mode')) {
                     localStorage.setItem('theme', 'light');
                 } else {
-                    localStorage.removeItem('theme'); // Default is dark
+                    localStorage.removeItem('theme');
                 }
             });
 
-            // --- All other animations ---
-            const observer = new IntersectionObserver((e) => e.forEach(entry => entry.isIntersecting && (entry.target.classList.add('visible'), observer.unobserve(entry.target)))), { threshold: 0.1 });
+            // Scroll Fade-In Animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-            const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d');
-            let particles = [], mouse = { x: null, y: null };
+
+            // Trailing Particles Animation
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: null, y: null };
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
             document.addEventListener('mousemove', (e) => {
@@ -213,12 +202,70 @@
                 for (let i = 0; i < 2; i++) { particles.push(new Particle()); }
             });
             function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-            class Particle { constructor() { this.x = mouse.x; this.y = mouse.y; this.size = Math.random() * 2 + 1; this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1; this.color = `var(--primary-accent)`; this.life = 1; } update() { this.x += this.speedX; this.y += this.speedY; this.life -= 0.02; if (this.size > 0.1) this.size -= 0.03; } draw() { ctx.fillStyle = `color-mix(in srgb, ${getComputedStyle(document.documentElement).getPropertyValue('--primary-accent').trim()} ${this.life * 100}%, transparent)`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
-            function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach((p, i) => { p.update(); p.draw(); if (p.life <= 0 || p.size <= 0.1) { particles.splice(i, 1); } }); requestAnimationFrame(animateParticles); }
+            class Particle {
+                constructor() {
+                    this.x = mouse.x; this.y = mouse.y;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1;
+                    this.life = 1;
+                }
+                update() {
+                    this.x += this.speedX; this.y += this.speedY;
+                    this.life -= 0.02;
+                    if (this.size > 0.1) this.size -= 0.03;
+                }
+                draw() {
+                    const currentAccent = getComputedStyle(document.body).getPropertyValue('--primary-accent').trim();
+                    ctx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.life * 100}%, transparent)`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update(); particles[i].draw();
+                    if (particles[i].life <= 0 || particles[i].size <= 0.1) { particles.splice(i, 1); }
+                }
+                requestAnimationFrame(animateParticles);
+            }
             animateParticles();
-            document.querySelectorAll('.tilt-card').forEach(c => { c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, { width: w, height: h } = r, rx = (y / h - 0.5) * -12, ry = (x / w - 0.5) * 12; c.style.transform = `scale(1.03) rotateX(${rx}deg) rotateY(${ry}deg)`; }); c.addEventListener('mouseleave', () => { c.style.transform = 'scale(1) rotateX(0) rotateY(0)'; }); });
+
+            // 3D "Glass" Tilt Effect
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -12;
+                    const rotateY = (x / width - 0.5) * 12;
+                    card.style.transform = `scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
+                });
+            });
+
+            // Firefly Effect
             const fireflyContainer = document.getElementById('firefly-container');
-            setInterval(() => { const f = document.createElement('div'); f.className = 'firefly'; const s = Math.random() * 6 + 2, d = Math.random() * 4 + 3; f.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${d}s;animation-delay:${Math.random()*5}s;`; fireflyContainer.appendChild(f); setTimeout(() => f.remove(), (d + 5) * 1000); }, 400);
+            function createFirefly() {
+                const firefly = document.createElement('div');
+                firefly.className = 'firefly';
+                const size = Math.random() * 6 + 2;
+                const duration = Math.random() * 4 + 3;
+                firefly.style.width = `${size}px`;
+                firefly.style.height = `${size}px`;
+                firefly.style.left = `${Math.random() * 100}%`;
+                firefly.style.top = `${Math.random() * 100}%`;
+                firefly.style.animationDuration = `${duration}s`;
+                firefly.style.animationDelay = `${Math.random() * 5}s`;
+                fireflyContainer.appendChild(firefly);
+                setTimeout(() => {
+                    firefly.remove();
+                }, (duration + 5) * 1000);
+            }
+            setInterval(createFirefly, 400);
         });
     </script>
 </body>
