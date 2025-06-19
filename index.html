@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- EDIT THE TITLE BELOW -->
+    <title>Jane Doe | Content Writer & Strategist</title>
+
+    <!-- Google Fonts for a professional look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* 
+        -------------------
+        EASY-TO-EDIT STYLES
+        -------------------
+        You can change the main colors of your site here.
+        */
+        :root {
+            --primary-color: #2c3e50; /* Dark Blue/Charcoal */
+            --secondary-color: #3498db; /* Bright Blue */
+            --background-color: #ecf0f1; /* Light Gray */
+            --text-color: #34495e; /* Dark Gray */
+            --header-text-color: #ffffff; /* White */
+        }
+
+        /* Basic Setup */
+        body {
+            font-family: 'Merriweather', serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            background-color: var(--primary-color);
+            color: var(--header-text-color);
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--header-text-color);
+        }
+        .header .tagline {
+            font-size: 1.2rem;
+            color: var(--header-text-color);
+            opacity: 0.9;
+        }
+
+        /* Sections */
+        section {
+            padding: 40px 20px;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        section h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .portfolio-item {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .portfolio-item h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+        .portfolio-item a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .portfolio-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Services Section */
+        .services-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .services-list li {
+            background: #ffffff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            text-align: center;
+        }
+        .contact-info p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .social-links a {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary-color);
+            color: var(--header-text-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================== -->
+    <!-- HEADER SECTION -->
+    <!-- ================== -->
+    <header class="header">
+        <!-- YOUR NAME -->
+        <h1>Jane Doe</h1>
+        <!-- YOUR TAGLINE -->
+        <p class="tagline">Crafting Words That Convert, Connect, and Captivate</p>
+    </header>
+
+    <main class="container">
+
+        <!-- ================== -->
+        <!-- ABOUT ME SECTION -->
+        <!-- ================== -->
+        <section id="about">
+            <h2>About Me</h2>
+            <!-- YOUR BIO -->
+            <p>
+                Hello! I'm Jane, a professional content writer and strategist with over 5 years of experience helping brands tell their stories. My passion is turning complex ideas into clear, compelling content that engages audiences and drives results. Whether it's a blog post, website copy, or a full content strategy, I focus on creating value for your readers and your business.
+            </p>
+        </section>
+
+        <!-- ==================== -->
+        <!-- MY PORTFOLIO SECTION -->
+        <!-- ==================== -->
+        <section id="portfolio">
+            <h2>My Work</h2>
+            <div class="portfolio-grid">
+                <!-- PORTFOLIO ITEM 1 -->
+                <div class="portfolio-item">
+                    <h3>How to Boost SEO with Long-Form Content</h3>
+                    <p>An in-depth guide written for a major marketing blog, which increased their organic traffic by 25%.</p>
+                    <a href="#" target="_blank">Read Article →</a>
+                </div>
+                
+                <!-- PORTFOLIO ITEM 2 -->
+                <div class="portfolio-item">
+                    <h3>Complete Website Copy for Tech Startup</h3>
+                    <p>Wrote all customer-facing copy for a new SaaS product, focusing on a clear and persuasive brand voice.</p>
+                    <a href="#" target="_blank">View Website →</a>
+                </div>
+
+                <!-- PORTFOLIO ITEM 3 -->
+                <div class="portfolio-item">
+                    <h3>E-commerce Product Descriptions</h3>
+                    <p>Crafted over 50 product descriptions for an online fashion retailer, leading to a 15% increase in conversions.</p>
+                    <a href="#" target="_blank">See Examples →</a>
+                </div>
+                <!-- Add more portfolio items by copying the block above -->
+            </div>
+        </section>
+
+        <!-- ================== -->
+        <!-- SERVICES SECTION -->
+        <!-- ================== -->
+        <section id="services">
+            <h2>Services</h2>
+            <!-- LIST YOUR SERVICES HERE -->
+            <ul class="services-list">
+                <li>SEO Blog Writing</li>
+                <li>Website Copywriting</li>
+                <li>Email Newsletters</li>
+                <li>Content Strategy</li>
+                <li>Case Studies</li>
+                <li>Social Media Content</li>
+            </ul>
+        </section>
+
+        <!-- ================== -->
+        <!-- CONTACT SECTION -->
+        <!-- ================== -->
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <div class="contact-info">
+                <p>
+                    I'm currently available for freelance projects. If you're looking for a writer who can deliver high-quality content on schedule, I'd love to hear from you!
+                </p>
+                <div class="social-links">
+                    <!-- REPLACE WITH YOUR EMAIL -->
+                    <a href="mailto:your.email@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+                    <!-- REPLACE WITH YOUR LINKEDIN URL -->
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <!-- REPLACE WITH YOUR TWITTER/X URL (or other relevant social media) -->
+                    <a href="https://twitter.com/yourhandle" target="_blank" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- ================== -->
+    <!-- FOOTER SECTION   -->
+    <!-- ================== -->
+    <footer>
+        <!-- YOUR NAME AND CURRENT YEAR -->
+        <p>© 2024 Jane Doe. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
