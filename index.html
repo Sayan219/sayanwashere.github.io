@@ -7,10 +7,10 @@
     <!-- Title for the browser tab -->
     <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- Google Fonts for a modern, clean look -->
+    <!-- NEW: Google Font for minimalist look (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -27,12 +27,13 @@
             --primary-accent: #ff1b4f; /* Neon Red */
             --text-color: #e0e0e0; /* Light Gray/Off-white */
             --text-muted: #a0a0a0; /* Muted Gray for subtitles */
-            --card-bg: rgba(15, 15, 15, 0.5); /* Semi-transparent dark background */
+            --card-bg: rgba(20, 20, 20, 0.4); /* Darker, less transparent card */
         }
 
-        /* Basic Setup */
+        /* Basic Setup with new font */
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
             line-height: 1.7;
             color: var(--text-color);
             background-color: var(--bg-color-start);
@@ -42,12 +43,16 @@
             padding: 0;
         }
 
+        /* Updated heading styles for minimalist look */
         h1, h2, h3 {
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 700;
+            font-family: 'Inter', sans-serif;
             color: var(--primary-accent);
-            text-shadow: 0 0 4px rgba(255, 27, 79, 0.5);
+            text-shadow: none; /* Removed shadow for cleaner look */
         }
+        h1 { font-weight: 700; }
+        h2 { font-weight: 700; }
+        h3 { font-weight: 600; }
+
 
         .container {
             max-width: 960px;
@@ -64,20 +69,32 @@
             color: #ffffff;
         }
 
-        /* Header Section */
+        /* Header Section with Profile Picture */
         .header {
             text-align: center;
-            padding: 6rem 1rem;
+            padding: 4rem 1rem 5rem 1rem; /* Adjusted padding */
         }
+        
+        /* NEW: Profile Picture Style */
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Makes the image a circle */
+            border: 4px solid var(--primary-accent);
+            object-fit: cover; /* Prevents the image from stretching */
+            margin: 0 auto 30px auto; /* Centers the image and adds space below */
+            box-shadow: 0 0 25px rgba(255, 27, 79, 0.4);
+        }
+
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             margin: 0;
-            letter-spacing: 2px;
+            letter-spacing: -1px; /* Tighter letter-spacing for Inter */
         }
         .header .tagline {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Sections */
@@ -90,7 +107,7 @@
         }
         section h2 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 50px;
         }
 
@@ -100,6 +117,7 @@
             text-align: center;
             max-width: 750px;
             margin: 0 auto;
+            color: var(--text-color);
         }
 
         /* Experience Section (Timeline) */
@@ -111,12 +129,12 @@
         .timeline::after {
             content: '';
             position: absolute;
-            width: 3px;
+            width: 2px; /* Thinner line */
             background-color: rgba(255, 27, 79, 0.3);
             top: 0;
             bottom: 0;
             left: 50%;
-            margin-left: -1.5px;
+            margin-left: -1px;
         }
         .timeline-item {
             padding: 10px 40px;
@@ -127,11 +145,11 @@
         .timeline-item::after {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            right: -10px;
+            width: 16px;
+            height: 16px;
+            right: -8px;
             background-color: var(--bg-color-start);
-            border: 4px solid var(--primary-accent);
+            border: 3px solid var(--primary-accent);
             top: 15px;
             border-radius: 50%;
             z-index: 1;
@@ -150,9 +168,9 @@
             width: 0;
             z-index: 1;
             right: 30px;
-            border: medium solid var(--primary-accent);
+            border: medium solid var(--card-bg); /* Match card background */
             border-width: 10px 0 10px 10px;
-            border-color: transparent transparent transparent var(--primary-accent);
+            border-color: transparent transparent transparent var(--card-bg);
         }
         .timeline-item.right::before {
             content: " ";
@@ -162,27 +180,24 @@
             width: 0;
             z-index: 1;
             left: 30px;
-            border: medium solid var(--primary-accent);
+            border: medium solid var(--card-bg); /* Match card background */
             border-width: 10px 10px 10px 0;
-            border-color: transparent var(--primary-accent) transparent transparent;
+            border-color: transparent var(--card-bg) transparent transparent;
         }
         .timeline-item.right::after {
-            left: -10px;
+            left: -8px;
         }
         .timeline-content {
             padding: 20px 30px;
             background: var(--card-bg);
-            border: 1px solid rgba(255, 27, 79, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             position: relative;
-        }
-        .timeline-content h3 {
-            margin-top: 0;
         }
         .timeline-content .date {
             font-size: 0.9em;
-            font-weight: bold;
+            font-weight: 600;
             color: var(--text-muted);
             margin-bottom: 10px;
             display: block;
@@ -196,18 +211,15 @@
         }
         .portfolio-item {
             background: var(--card-bg);
-            border: 1px solid rgba(255, 27, 79, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 25px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         .portfolio-item:hover {
             transform: translateY(-8px);
-            box-shadow: 0 0 20px rgba(255, 27, 79, 0.5);
-        }
-        .portfolio-item h3 {
-            margin-top: 0;
+            box-shadow: 0 0 20px rgba(255, 27, 79, 0.4);
         }
 
         /* Expertise/Skills Section */
@@ -222,11 +234,11 @@
         .skills-list li {
             background: transparent;
             padding: 10px 20px;
-            border-radius: 20px;
-            border: 2px solid var(--primary-accent);
+            border-radius: 5px; /* Less rounded for a sharper look */
+            border: 1px solid var(--primary-accent);
             color: var(--primary-accent);
-            font-family: 'Roboto Mono', monospace;
-            font-weight: bold;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
         .skills-list li:hover {
@@ -275,15 +287,18 @@
             }
             .timeline-item.left::before, .timeline-item.right::before {
                 left: 60px;
-                border: medium solid var(--primary-accent);
+                border: medium solid var(--card-bg);
                 border-width: 10px 10px 10px 0;
-                border-color: transparent var(--primary-accent) transparent transparent;
+                border-color: transparent var(--card-bg) transparent transparent;
             }
             .timeline-item.left::after, .timeline-item.right::after {
-                left: 21px;
+                left: 23px;
             }
             .timeline-item.right {
                 left: 0%;
+            }
+            .header h1 {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -294,6 +309,9 @@
     <!-- HEADER SECTION -->
     <!-- ================== -->
     <header class="header">
+        <!-- NEW: Profile Picture -->
+        <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture">
+        
         <h1>Sayan Chakraborty</h1>
         <p class="tagline">Technical Writer | SaaS • Web3 • Tech • Gaming</p>
     </header>
@@ -365,18 +383,17 @@
                 <div class="portfolio-item">
                     <h3>Building a Successful Femtech App</h3>
                     <p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p>
-                    <a href="https://ideausher.com/blog/femtech-app-development/" target="_blank">Read Article →</a>
+                    <a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a>
                 </div>
                 <div class="portfolio-item">
                     <h3>Why "Mental Flossing" is Your Last Hope?</h3>
                     <p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p>
-                    <a href="https://medium.com/@sayanwashere/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-fdec60e280b3" target="_blank">Read on Medium →</a>
+                    <a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a>
                 </div>
                 <div class="portfolio-item">
                     <h3>My Full Portfolio Document</h3>
                     <p>A comprehensive document showcasing a wider range of my projects and capabilities.</p>
-                    <!-- Replace '#' with the public link to your portfolio PDF/document -->
-                    <a href="https://drive.google.com/file/d/1ZCjxapScG0MrtyQcoouUZGunRbzgCE-2/view?usp=sharing" target="_blank">View Full Portfolio →</a>
+                    <a href="https://docs.google.com/document/d/1BfVv1S41Q2wW9SgR7j7PzF0L-6Yx3n5k/edit?usp=sharing&ouid=113401569426915383501&rtpof=true&sd=true" target="_blank">View Full Portfolio →</a>
                 </div>
             </div>
         </section>
@@ -406,7 +423,7 @@
             <h2>Get In Touch</h2>
             <div class="contact-info">
                 <p>
-                    I'm open to freelance opportunities and collaborations. Let's create something great together!
+                    Currently open to freelance opportunities and collaborations. Let's create something great together!
                 </p>
                 <div class="social-links">
                     <a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
