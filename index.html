@@ -19,37 +19,32 @@
         -------------------
         */
         :root {
-            --bg-color-start: #000000; /* Black (Prime) */
-            --bg-color-end: #4d0000; /* Dark Red */
-            --primary-accent: #ff4d4d; /* Bright, clean red */
+            --bg-color-start: #000000;
+            --bg-color-end: #4d0000;
+            --primary-accent: #ff4d4d;
             --text-color: #f0f0f0;
             --text-muted: #a0a0a0;
             --card-bg: rgba(20, 20, 20, 0.6);
-            /* JS updates these for the mouse glow */
             --mouse-x: 50%; 
             --mouse-y: 50%;
         }
 
-        /* NEW: Pulsating animation keyframes */
         @keyframes pulsate {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.15;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.15);
-                opacity: 0.2;
-            }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.2; }
         }
 
-        /* Basic Setup with new gradient */
+        /* NEW: Hide the default cursor */
+        html {
+            cursor: none;
+        }
+
         body {
             font-family: 'Lato', sans-serif;
             font-weight: 400;
             line-height: 1.7;
             color: var(--text-color);
             background-color: var(--bg-color-start);
-            /* NEW: Updated gradient to be 70% black */
             background-image: linear-gradient(135deg, var(--bg-color-start) 70%, var(--bg-color-end) 100%);
             background-attachment: fixed;
             margin: 0;
@@ -57,50 +52,55 @@
             overflow-x: hidden;
         }
         
-        /* NEW: Separated glow effects */
         body::before { /* Static diffused glow */
             content: '';
             position: fixed;
             top: -20%; left: -20%;
             width: 140%; height: 140%;
-            z-index: -2;
+            z-index: -3; /* Pushed further back */
             background-image: radial-gradient(circle at 15% 15%, rgba(255, 77, 77, 0.2), transparent 30%);
             filter: blur(100px);
         }
         
-        body::after { /* Pulsating mouse glow */
+        body::after { /* Pulsating background glow */
             content: '';
             position: fixed;
             top: var(--mouse-y);
             left: var(--mouse-x);
             width: 400px;
             height: 400px;
-            z-index: -1;
+            z-index: -2; /* Pushed back */
             background: radial-gradient(circle, var(--primary-accent), transparent 60%);
             border-radius: 50%;
             animation: pulsate 5s infinite ease-in-out;
             filter: blur(50px);
-            pointer-events: none; /* Allows clicking through the glow */
+            pointer-events: none;
         }
 
-        h1, h2, h3 {
-            font-family: 'Lato', sans-serif;
-            color: var(--primary-accent);
-            text-shadow: none;
+        /* NEW: Canvas for particle trail */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Sits behind content, in front of glows */
+            pointer-events: none; /* Allows clicking through it */
         }
+
+        h1, h2, h3 { font-family: 'Lato', sans-serif; color: var(--primary-accent); text-shadow: none; }
         h1 { font-weight: 700; }
         h2 { font-weight: 700; }
         h3 { font-weight: 700; }
 
-        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
         a:hover { color: #ffffff; }
 
         .header { text-align: center; padding: 4rem 1rem 5rem 1rem; }
         
         .profile-picture {
-            width: 160px;
-            height: 160px;
+            width: 160px; height: 160px;
             border-radius: 12px;
             border: 3px solid var(--primary-accent);
             object-fit: cover;
@@ -120,47 +120,15 @@
 
         #about p { font-size: 1.1rem; text-align: center; max-width: 750px; margin: 0 auto; }
 
-        /* Timeline Section - FIX APPLIED */
         .timeline { position: relative; max-width: 750px; margin: 0 auto; }
-        .timeline::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            background-color: rgba(255, 77, 77, 0.3);
-            top: 0; bottom: 0; left: 50%;
-            margin-left: -1px; /* Center the line */
-        }
-        .timeline-item {
-            padding: 10px 40px;
-            position: relative;
-            width: 50%;
-            box-sizing: border-box; /* IMPORTANT: This was the key to fixing alignment */
-        }
-        .timeline-item::after { /* The dot */
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-color: var(--bg-color-start);
-            border: 3px solid var(--primary-accent);
-            top: 15px;
-            border-radius: 50%;
-            z-index: 1;
-        }
+        .timeline::after { content: ''; position: absolute; width: 2px; background-color: rgba(255, 77, 77, 0.3); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; }
+        .timeline-item::after { content: ''; position: absolute; width: 16px; height: 16px; background-color: var(--bg-color-start); border: 3px solid var(--primary-accent); top: 15px; border-radius: 50%; z-index: 1; }
         .timeline-item.left { left: 0; }
         .timeline-item.right { left: 50%; }
-        
-        /* FIX: Correctly position dots on the center line */
-        .timeline-item.left::after { right: -9px; } /* Half of width (16px/2) + half of border (2px) approx */
+        .timeline-item.left::after { right: -9px; }
         .timeline-item.right::after { left: -9px; }
-
-        .timeline-content {
-            padding: 20px 30px;
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            backdrop-filter: blur(8px);
-        }
+        .timeline-content { padding: 20px 30px; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; backdrop-filter: blur(8px); }
         .timeline-content .date { font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px; display: block; }
 
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
@@ -187,6 +155,9 @@
     </style>
 </head>
 <body>
+    
+    <!-- NEW: Canvas element for particles -->
+    <canvas id="particle-canvas"></canvas>
 
     <header class="header">
         <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture">
@@ -214,29 +185,15 @@
         <section id="portfolio" class="fade-in">
             <h2>My Work</h2>
             <div class="portfolio-grid">
-                <div class="portfolio-item fade-in">
-                    <h3>Magento 2 CMS Page Hierarchy</h3>
-                    <p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p>
-                    <a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a>
-                </div>
-                <div class="portfolio-item fade-in">
-                    <h3>Building a Successful Femtech App</h3>
-                    <p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p>
-                    <a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a>
-                </div>
-                <div class="portfolio-item fade-in">
-                    <h3>Why "Mental Flossing" is Your Last Hope?</h3>
-                    <p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p>
-                    <a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a>
-                </div>
+                <div class="portfolio-item fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div>
+                <div class="portfolio-item fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a></div>
+                <div class="portfolio-item fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a></div>
             </div>
         </section>
 
         <section id="skills" class="fade-in">
             <h2>Expertise</h2>
-            <ul class="skills-list">
-                <li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li>
-            </ul>
+            <ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li></ul>
         </section>
 
         <section id="contact" class="fade-in">
@@ -259,7 +216,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Interactive Mouse Glow Effect (No changes needed here) ---
+            // --- Pulsating Background Glow ---
             document.addEventListener('mousemove', e => {
                 requestAnimationFrame(() => {
                     document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
@@ -269,23 +226,78 @@
 
             // --- Scroll Fade-In Animation ---
             const fadeInElements = document.querySelectorAll('.fade-in');
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         observer.unobserve(entry.target);
                     }
                 });
-            }, observerOptions);
-
+            }, { threshold: 0.1 });
             fadeInElements.forEach(el => observer.observe(el));
             
+            // --- NEW: Trailing Particles Animation ---
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: null, y: null };
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+                // Create a burst of particles on move
+                for (let i = 0; i < 2; i++) {
+                    particles.push(new Particle());
+                }
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = mouse.x;
+                    this.y = mouse.y;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 2 - 1;
+                    this.speedY = Math.random() * 2 - 1;
+                    this.color = `rgba(255, 77, 77, ${Math.random() * 0.5 + 0.5})`; // Varying opacity
+                    this.life = 1; // 1 = 100% life
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.life -= 0.02;
+                    if (this.size > 0.1) this.size -= 0.03;
+                }
+                draw() {
+                    ctx.fillStyle = this.color.replace(/[\d\.]+\)$/g, `${this.life})`); // update opacity
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function handleParticles() {
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].life <= 0 || particles[i].size <= 0.1) {
+                        particles.splice(i, 1);
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                handleParticles();
+                requestAnimationFrame(animate);
+            }
+            animate();
         });
     </script>
 
