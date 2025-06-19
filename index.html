@@ -20,28 +20,35 @@
         */
         :root {
             --bg-color-start: #000000;
-            --bg-color-end: #4d0000;
+            --bg-color-end: #3a0000; /* Slightly lighter dark red */
             --primary-accent: #ff4d4d;
+            --deep-red-glow: rgba(139, 0, 0, 0.3);
+            --normal-red-glow: rgba(255, 77, 77, 0.2);
             --text-color: #f0f0f0;
             --text-muted: #a0a0a0;
-            --card-bg: rgba(20, 20, 20, 0.6);
-            --mouse-x: 50%; 
-            --mouse-y: 50%;
+            --card-bg: rgba(25, 25, 25, 0.4);
         }
 
-        @keyframes pulsate {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.2; }
+        /* NEW: Keyframes for moving glow balls */
+        @keyframes move-glow-1 {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(40vw, 50vh); }
+            50% { transform: translate(10vw, -20vh); }
+            75% { transform: translate(-30vw, 30vh); }
+            100% { transform: translate(0, 0); }
+        }
+        @keyframes move-glow-2 {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-30vw, -40vh); }
+            50% { transform: translate(20vw, 20vh); }
+            75% { transform: translate(40vw, -30vh); }
+            100% { transform: translate(0, 0); }
         }
 
-        /* NEW: Hide the default cursor */
-        html {
-            cursor: none;
-        }
+        html { cursor: none; }
 
         body {
             font-family: 'Lato', sans-serif;
-            font-weight: 400;
             line-height: 1.7;
             color: var(--text-color);
             background-color: var(--bg-color-start);
@@ -52,62 +59,55 @@
             overflow-x: hidden;
         }
         
-        body::before { /* Static diffused glow */
-            content: '';
+        /* NEW: Container for the moving glow balls */
+        .glow-container {
             position: fixed;
-            top: -20%; left: -20%;
-            width: 140%; height: 140%;
-            z-index: -3; /* Pushed further back */
-            background-image: radial-gradient(circle at 15% 15%, rgba(255, 77, 77, 0.2), transparent 30%);
-            filter: blur(100px);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -3;
+            overflow: hidden;
         }
-        
-        body::after { /* Pulsating background glow */
-            content: '';
-            position: fixed;
-            top: var(--mouse-y);
-            left: var(--mouse-x);
-            width: 400px;
-            height: 400px;
-            z-index: -2; /* Pushed back */
-            background: radial-gradient(circle, var(--primary-accent), transparent 60%);
+        .glow-ball {
+            position: absolute;
             border-radius: 50%;
-            animation: pulsate 5s infinite ease-in-out;
-            filter: blur(50px);
+            filter: blur(100px);
+            opacity: 0.7;
+        }
+        .ball-1 {
+            width: 500px; height: 500px;
+            top: 10%; left: 10%;
+            background: var(--deep-red-glow);
+            animation: move-glow-1 35s infinite alternate ease-in-out;
+        }
+        .ball-2 {
+            width: 600px; height: 600px;
+            top: 50%; left: 60%;
+            background: var(--normal-red-glow);
+            animation: move-glow-2 45s infinite alternate ease-in-out -10s;
+        }
+        .ball-3 {
+            width: 400px; height: 400px;
+            top: 80%; left: 20%;
+            background: var(--deep-red-glow);
+            animation: move-glow-1 40s infinite alternate-reverse ease-in-out -5s;
+        }
+
+
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
             pointer-events: none;
         }
 
-        /* NEW: Canvas for particle trail */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* Sits behind content, in front of glows */
-            pointer-events: none; /* Allows clicking through it */
-        }
-
-        h1, h2, h3 { font-family: 'Lato', sans-serif; color: var(--primary-accent); text-shadow: none; }
-        h1 { font-weight: 700; }
-        h2 { font-weight: 700; }
-        h3 { font-weight: 700; }
-
+        h1, h2, h3 { font-family: 'Lato', sans-serif; color: var(--primary-accent); text-shadow: none; font-weight: 700; }
         .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
         a:hover { color: #ffffff; }
 
         .header { text-align: center; padding: 4rem 1rem 5rem 1rem; }
-        
-        .profile-picture {
-            width: 160px; height: 160px;
-            border-radius: 12px;
-            border: 3px solid var(--primary-accent);
-            object-fit: cover;
-            margin: 0 auto 30px auto;
-            box-shadow: 0 0 25px rgba(255, 77, 77, 0.4);
-        }
-
+        .profile-picture { width: 160px; height: 160px; border-radius: 12px; border: 3px solid var(--primary-accent); object-fit: cover; margin: 0 auto 30px auto; box-shadow: 0 0 25px rgba(255, 77, 77, 0.4); }
         .header h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; }
         .header .tagline { font-size: 1.2rem; color: var(--text-muted); font-weight: 300; }
 
@@ -122,17 +122,28 @@
 
         .timeline { position: relative; max-width: 750px; margin: 0 auto; }
         .timeline::after { content: ''; position: absolute; width: 2px; background-color: rgba(255, 77, 77, 0.3); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
-        .timeline-item { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; perspective: 1000px; }
         .timeline-item::after { content: ''; position: absolute; width: 16px; height: 16px; background-color: var(--bg-color-start); border: 3px solid var(--primary-accent); top: 15px; border-radius: 50%; z-index: 1; }
         .timeline-item.left { left: 0; }
         .timeline-item.right { left: 50%; }
         .timeline-item.left::after { right: -9px; }
         .timeline-item.right::after { left: -9px; }
-        .timeline-content { padding: 20px 30px; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; backdrop-filter: blur(8px); }
+        .timeline-content {
+            padding: 20px 30px; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; backdrop-filter: blur(10px);
+            /* NEW: for tilt effect */
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
         .timeline-content .date { font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px; display: block; }
-
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .portfolio-item { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 25px; backdrop-filter: blur(8px); }
+        
+        /* NEW: Add perspective to portfolio grid for tilt effect */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; perspective: 1000px; }
+        .portfolio-item {
+            background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 25px; backdrop-filter: blur(10px);
+            /* NEW: for tilt effect */
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
 
         .skills-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         .skills-list li { background: transparent; padding: 10px 20px; border-radius: 5px; border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 400; transition: all 0.3s ease; }
@@ -151,12 +162,19 @@
             .timeline-item.right { left: 0%; }
             .timeline-item.left::after, .timeline-item.right::after { left: 12px; }
             .header h1 { font-size: 2.5rem; }
+            .glow-ball { filter: blur(60px); } /* Reduce blur on mobile for performance */
         }
     </style>
 </head>
 <body>
     
-    <!-- NEW: Canvas element for particles -->
+    <!-- NEW: Moving background glows -->
+    <div class="glow-container">
+        <div class="glow-ball ball-1"></div>
+        <div class="glow-ball ball-2"></div>
+        <div class="glow-ball ball-3"></div>
+    </div>
+    
     <canvas id="particle-canvas"></canvas>
 
     <header class="header">
@@ -166,63 +184,42 @@
     </header>
 
     <main class="container">
-        <section id="about" class="fade-in">
-            <h2>About Me</h2>
-            <p>A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.</p>
-        </section>
+        <section id="about" class="fade-in"><h2>About Me</h2><p>A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.</p></section>
 
         <section id="experience" class="fade-in">
             <h2>Work Experience</h2>
             <div class="timeline">
-                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div>
-                <div class="timeline-item right fade-in"><div class="timeline-content"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div>
-                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div>
-                <div class="timeline-item right fade-in"><div class="timeline-content"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div>
-                <div class="timeline-item left fade-in"><div class="timeline-content"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div>
+                <div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div>
+                <div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div>
+                <div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div>
+                <div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div>
+                <div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div>
             </div>
         </section>
 
         <section id="portfolio" class="fade-in">
             <h2>My Work</h2>
             <div class="portfolio-grid">
-                <div class="portfolio-item fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div>
-                <div class="portfolio-item fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a></div>
-                <div class="portfolio-item fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a></div>
+                <!-- Row 1 -->
+                <div class="portfolio-item tilt-card fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div>
+                <div class="portfolio-item tilt-card fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a></div>
+                <div class="portfolio-item tilt-card fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a></div>
+                <!-- NEW Row 2 -->
+                <div class="portfolio-item tilt-card fade-in"><h3>The Ultimate Guide to Web3 Wallets</h3><p>A beginner-friendly but comprehensive guide explaining the types and security of Web3 crypto wallets.</p><a href="#" target="_blank">Read Guide →</a></div>
+                <div class="portfolio-item tilt-card fade-in"><h3>API Documentation Best Practices</h3><p>A detailed article for developers and technical writers on creating clear, effective API documentation.</p><a href="#" target="_blank">View Practices →</a></div>
+                <div class="portfolio-item tilt-card fade-in"><h3>Content Strategy for B2B SaaS</h3><p>Exploring high-level strategies for using content to drive lead generation and user retention for SaaS companies.</p><a href="#" target="_blank">Read Strategy →</a></div>
             </div>
         </section>
 
-        <section id="skills" class="fade-in">
-            <h2>Expertise</h2>
-            <ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li></ul>
-        </section>
+        <section id="skills" class="fade-in"><h2>Expertise</h2><ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li></ul></section>
 
-        <section id="contact" class="fade-in">
-            <h2>Get In Touch</h2>
-            <div class="contact-info">
-                <p>I'm open to freelance opportunities and collaborations. Let's create something great together!</p>
-                <div class="social-links">
-                    <a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a>
-                </div>
-            </div>
-        </section>
+        <section id="contact" class="fade-in"><h2>Get In Touch</h2><div class="contact-info"><p>I'm open to freelance opportunities and collaborations. Let's create something great together!</p><div class="social-links"><a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a><a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a><a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a></div></div></section>
     </main>
     
-    <footer>
-        <p>© 2024 Sayan Chakraborty. Crafted with passion.</p>
-    </footer>
+    <footer><p>© 2024 Sayan Chakraborty. Crafted with passion.</p></footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Pulsating Background Glow ---
-            document.addEventListener('mousemove', e => {
-                requestAnimationFrame(() => {
-                    document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
-                    document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
-                });
-            });
 
             // --- Scroll Fade-In Animation ---
             const fadeInElements = document.querySelectorAll('.fade-in');
@@ -236,68 +233,69 @@
             }, { threshold: 0.1 });
             fadeInElements.forEach(el => observer.observe(el));
             
-            // --- NEW: Trailing Particles Animation ---
+            // --- Trailing Particles Animation ---
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
             let mouse = { x: null, y: null };
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-
             document.addEventListener('mousemove', (e) => {
                 mouse.x = e.x;
                 mouse.y = e.y;
-                // Create a burst of particles on move
-                for (let i = 0; i < 2; i++) {
-                    particles.push(new Particle());
-                }
+                for (let i = 0; i < 2; i++) { particles.push(new Particle()); }
             });
-
+            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
             class Particle {
                 constructor() {
-                    this.x = mouse.x;
-                    this.y = mouse.y;
+                    this.x = mouse.x; this.y = mouse.y;
                     this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 2 - 1;
-                    this.speedY = Math.random() * 2 - 1;
-                    this.color = `rgba(255, 77, 77, ${Math.random() * 0.5 + 0.5})`; // Varying opacity
-                    this.life = 1; // 1 = 100% life
+                    this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1;
+                    this.color = `rgba(255, 77, 77, ${Math.random() * 0.5 + 0.5})`;
+                    this.life = 1;
                 }
                 update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
+                    this.x += this.speedX; this.y += this.speedY;
                     this.life -= 0.02;
                     if (this.size > 0.1) this.size -= 0.03;
                 }
                 draw() {
-                    ctx.fillStyle = this.color.replace(/[\d\.]+\)$/g, `${this.life})`); // update opacity
+                    ctx.fillStyle = this.color.replace(/[\d\.]+\)$/g, `${this.life})`);
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
-
             function handleParticles() {
                 for (let i = particles.length - 1; i >= 0; i--) {
-                    particles[i].update();
-                    particles[i].draw();
-                    if (particles[i].life <= 0 || particles[i].size <= 0.1) {
-                        particles.splice(i, 1);
-                    }
+                    particles[i].update(); particles[i].draw();
+                    if (particles[i].life <= 0 || particles[i].size <= 0.1) { particles.splice(i, 1); }
                 }
             }
-
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 handleParticles();
                 requestAnimationFrame(animate);
             }
             animate();
+
+            // --- NEW: 3D "Glass" Tilt Effect ---
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const { width, height } = rect;
+                    const rotateX = (y / height - 0.5) * -12; // Invert for natural feel
+                    const rotateY = (x / width - 0.5) * 12;
+
+                    card.style.transform = `scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
+                });
+            });
         });
     </script>
 
