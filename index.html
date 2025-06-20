@@ -46,13 +46,20 @@
             background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
             background-attachment: fixed;
             margin: 0; padding: 0;
-            overflow: hidden;
+            /* FIX: 'overflow: hidden' was removed from here to enable scrolling */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        #glow-ball-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
-        .glow-ball { position: absolute; border-radius: 50%; background: var(--primary-accent); filter: blur(80px); opacity: 0.3; transition: transform 0.5s ease-out; }
+        #glow-ball-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            /* FIX: overflow is now correctly placed on the container */
+            overflow: hidden;
+        }
 
+        .glow-ball { position: absolute; border-radius: 50%; background: var(--primary-accent); filter: blur(80px); opacity: 0.3; transition: transform 0.5s ease-out; }
         #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         
         #theme-toggle {
@@ -120,7 +127,6 @@
         footer { text-align: center; padding: 20px; background: transparent; color: var(--text-muted); font-size: 0.9rem; }
         
         @media screen and (max-width: 768px) {
-            body { overflow-y: auto; }
             .timeline::after { left: 20px; }
             .timeline-item { width: 100%; padding-left: 50px; padding-right: 0; }
             .timeline-item.right { left: 0%; }
@@ -153,106 +159,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Theme Toggle ---
+            // Theme Toggle Logic
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                body.classList.add(savedTheme + '-mode');
-            }
+            if (savedTheme) body.classList.add(savedTheme + '-mode');
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
                 localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : '');
             });
 
-            // --- Scroll Fade-In ---
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
+            // Scroll Fade-In
+            const observer = new IntersectionObserver((entries) => entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            }), { threshold: 0.1 });
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-            // --- Particle Trail ---
+            // Particle Trail
             const particleCanvas = document.getElementById('particle-canvas');
             const pCtx = particleCanvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null };
-            
-            // CORRECTED ORDER: Define the function before calling it.
-            function resizeCanvas() {
-                particleCanvas.width = window.innerWidth;
-                particleCanvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            document.addEventListener('mousemove', (e) => {
-                mouse.x = e.x;
-                mouse.y = e.y;
-                for (let i = 0; i < 2; i++) {
-                    particles.push(new Particle());
-                }
-            });
-
-            class Particle {
-                constructor() {
-                    this.x = mouse.x;
-                    this.y = mouse.y;
-                    this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 2 - 1;
-                    this.speedY = Math.random() * 2 - 1;
-                    this.life = 1;
-                }
-                update() {
-                    this.x += this.speedX;
-                    this.y += this.speedY;
-                    this.life -= 0.02;
-                    if (this.size > 0.1) this.size -= 0.03;
-                }
-                draw() {
-                    const currentAccent = getComputedStyle(document.body).getPropertyValue('--primary-accent').trim();
-                    pCtx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.life * 100}%, transparent)`;
-                    pCtx.beginPath();
-                    pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    pCtx.fill();
-                }
-            }
-
-            function animateParticles() {
-                pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-                particles.forEach((p, i) => {
-                    p.update();
-                    p.draw();
-                    if (p.life <= 0 || p.size <= 0.1) {
-                        particles.splice(i, 1);
-                    }
-                });
-                requestAnimationFrame(animateParticles);
-            }
+            let particles = [], mouse = { x: null, y: null };
+            function resizeCanvas() { particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight; }
+            resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+            document.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; for (let i = 0; i < 2; i++) particles.push(new Particle()); });
+            class Particle { constructor() { this.x = mouse.x; this.y = mouse.y; this.size = Math.random() * 2 + 1; this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1; this.life = 1; } update() { this.x += this.speedX; this.y += this.speedY; this.life -= 0.02; if (this.size > 0.1) this.size -= 0.03; } draw() { const currentAccent = getComputedStyle(document.body).getPropertyValue('--primary-accent').trim(); pCtx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.life * 100}%, transparent)`; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); pCtx.fill(); } }
+            function animateParticles() { pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height); particles.forEach((p, i) => { p.update(); p.draw(); if (p.life <= 0 || p.size <= 0.1) particles.splice(i, 1); }); requestAnimationFrame(animateParticles); }
             animateParticles();
 
-            // --- 3D Tilt ---
-            document.querySelectorAll('.tilt-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const { width, height } = rect;
-                    const rotateX = (y / height - 0.5) * -12;
-                    const rotateY = (x / width - 0.5) * 12;
-                    card.style.transform = `scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
-                });
-            });
+            // 3D Tilt
+            document.querySelectorAll('.tilt-card').forEach(c => { c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, { width: w, height: h } = r, rx = (y / h - 0.5) * -12, ry = (x / w - 0.5) * 12; c.style.transform = `scale(1.03) rotateX(${rx}deg) rotateY(${ry}deg)`; }); c.addEventListener('mouseleave', () => { c.style.transform = 'scale(1) rotateX(0) rotateY(0)'; }); });
 
-            // --- Interactive Glow Balls ---
+            // Interactive Glow Balls
             const ballContainer = document.getElementById('glow-ball-container');
             const glowBalls = [];
             const numBalls = 6;
@@ -261,39 +201,27 @@
                 ball.classList.add('glow-ball');
                 ballContainer.appendChild(ball);
                 const ballData = {
-                    element: ball,
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
-                    vx: (Math.random() - 0.5) * 1.5,
-                    vy: (Math.random() - 0.5) * 1.5,
+                    element: ball, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+                    vx: (Math.random() - 0.5) * 1.5, vy: (Math.random() - 0.5) * 1.5,
                     size: Math.random() * 200 + 150,
                 };
                 glowBalls.push(ballData);
                 ball.style.width = ball.style.height = `${ballData.size}px`;
             }
-
             function updateGlowBalls() {
                 glowBalls.forEach(ball => {
-                    const dx = ball.x - mouse.x;
-                    const dy = ball.y - mouse.y;
+                    const dx = ball.x - mouse.x; const dy = ball.y - mouse.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     const repelForce = 300;
-
                     if (dist < repelForce && mouse.x !== null) {
                         const angle = Math.atan2(dy, dx);
                         const force = (repelForce - dist) / repelForce * 2;
-                        ball.vx += Math.cos(angle) * force;
-                        ball.vy += Math.sin(angle) * force;
+                        ball.vx += Math.cos(angle) * force; ball.vy += Math.sin(angle) * force;
                     }
-
-                    ball.x += ball.vx;
-                    ball.y += ball.vy;
-                    ball.vx *= 0.96;
-                    ball.vy *= 0.96;
-
+                    ball.x += ball.vx; ball.y += ball.vy;
+                    ball.vx *= 0.96; ball.vy *= 0.96;
                     if (ball.x < 0 - ball.size || ball.x > window.innerWidth + ball.size) ball.vx *= -1.1;
                     if (ball.y < 0 - ball.size || ball.y > window.innerHeight + ball.size) ball.vy *= -1.1;
-                    
                     ball.element.style.transform = `translate(${ball.x - ball.size/2}px, ${ball.y - ball.size/2}px)`;
                 });
                 requestAnimationFrame(updateGlowBalls);
