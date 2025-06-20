@@ -37,31 +37,35 @@
             --toggle-icon-color: #212529;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
         html { cursor: none; }
 
         body {
             font-family: 'Lato', sans-serif;
             color: var(--text-color);
             background-color: var(--bg-color-start);
-            /* Gradient adjusted to match screenshot aesthetic */
             background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
             background-attachment: fixed;
             margin: 0; padding: 0;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevent scrollbars from glow balls */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         
-        #firefly-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; }
-        .firefly {
-            position: absolute; border-radius: 50%;
-            background-color: var(--primary-accent);
-            box-shadow: 0 0 10px 2px var(--primary-accent), 0 0 20px 5px color-mix(in srgb, var(--primary-accent) 50%, transparent);
-            animation-name: twinkle; animation-timing-function: ease-in-out; animation-iteration-count: 1;
+        /* NEW: Container for interactive glow balls */
+        #glow-ball-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .glow-ball {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-accent);
+            filter: blur(80px); /* Diffused look */
+            opacity: 0.3;
+            transition: transform 0.5s ease-out; /* Smooth movement */
         }
 
         #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
@@ -104,19 +108,22 @@
 
         #about p { font-size: 1.1rem; text-align: center; max-width: 750px; margin: 0 auto; }
 
+        /* Timeline Fix */
         .timeline { position: relative; max-width: 750px; margin: 0 auto; }
-        .timeline::after { content: ''; position: absolute; width: 2px; background-color: color-mix(in srgb, var(--primary-accent) 30%, transparent); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+        .timeline::after { content: ''; position: absolute; width: 2px; background-color: color-mix(in srgb, var(--primary-accent) 30%, transparent); top: 0; bottom: 0; left: 50%; transform: translateX(-50%); }
         .timeline-item { padding: 10px 40px; position: relative; width: 50%; box-sizing: border-box; perspective: 1000px; }
         .timeline-item::after { content: ''; position: absolute; width: 16px; height: 16px; background-color: var(--bg-color-start); border: 3px solid var(--primary-accent); top: 15px; border-radius: 50%; z-index: 1; transition: background-color 0.3s ease; }
         .timeline-item.left { left: 0; }
         .timeline-item.right { left: 50%; }
-        .timeline-item.left::after { right: -9px; }
-        .timeline-item.right::after { left: -9px; }
+        .timeline-item.left::after { right: 0; transform: translateX(50%); } /* Perfect alignment */
+        .timeline-item.right::after { left: 0; transform: translateX(-50%); } /* Perfect alignment */
+        
         .timeline-content { padding: 20px 30px; background: var(--card-bg); border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent); border-radius: 12px; backdrop-filter: blur(10px); transition: transform 0.1s ease-out; transform-style: preserve-3d; }
         .timeline-content .date { font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px; display: block; }
         
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; perspective: 1000px; }
         .portfolio-item { background: var(--card-bg); border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent); border-radius: 12px; padding: 25px; backdrop-filter: blur(10px); transition: transform 0.1s ease-out; transform-style: preserve-3d; }
+        
         .skills-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         .skills-list li { background: transparent; padding: 10px 20px; border-radius: 5px; border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 400; transition: all 0.3s ease; }
         .skills-list li:hover { background: var(--primary-accent); color: var(--bg-color-start); }
@@ -129,10 +136,11 @@
         footer { text-align: center; padding: 20px; background: transparent; color: var(--text-muted); font-size: 0.9rem; }
         
         @media screen and (max-width: 768px) {
+            body { overflow-y: auto; } /* Allow scrolling on mobile */
             .timeline::after { left: 20px; }
             .timeline-item { width: 100%; padding-left: 50px; padding-right: 0; }
             .timeline-item.right { left: 0%; }
-            .timeline-item.left::after, .timeline-item.right::after { left: 12px; }
+            .timeline-item.left::after, .timeline-item.right::after { left: 20px; }
             .header h1 { font-size: 2.5rem; }
         }
     </style>
@@ -140,7 +148,7 @@
 <body>
     
     <button id="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i><i class="fas fa-sun"></i></button>
-    <div id="firefly-container"></div>
+    <div id="glow-ball-container"></div>
     <canvas id="particle-canvas"></canvas>
 
     <header class="header">
@@ -150,122 +158,95 @@
     </header>
 
     <main class="container">
-        <!-- Content Sections -->
+        <!-- Content Sections Remain Unchanged -->
         <section id="about" class="fade-in"><h2>About Me</h2><p>A versatile individual with a rather unconventional career path. As a Mechanical Engineer turned content writer, I bring a wealth of experience and dedication to any position I hold. With a passion for writing, I always seek opportunities where I can learn, act, and deliver. Regardless of the responsibility, sincerity and dedication can always be expected.</p></section>
         <section id="experience" class="fade-in"><h2>Work Experience</h2><div class="timeline"><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div></div></section>
-        <section id="portfolio" class="fade-in"><h2>My Work</h2><div class="portfolio-grid"><div class="portfolio-item tilt-card fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/femtech-app-development/" target="_blank">Read Article →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanwashere/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-fdec60e280b3" target="_blank">Read on Medium →</a></div><div class="portfolio-item tilt-card fade-in"><h3>The Ultimate Guide to Web3 Wallets</h3><p>A beginner-friendly but comprehensive guide explaining the types and security of Web3 crypto wallets.</p><a href="#" target="_blank">Read Guide →</a></div><div class="portfolio-item tilt-card fade-in"><h3>API Documentation Best Practices</h3><p>A detailed article for developers and technical writers on creating clear, effective API documentation.</p><a href="#" target="_blank">View Practices →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Content Strategy for B2B SaaS</h3><p>Exploring high-level strategies for using content to drive lead generation and user retention for SaaS companies.</p><a href="#" target="_blank">Read Strategy →</a></div></div></section>
+        <section id="portfolio" class="fade-in"><h2>My Work</h2><div class="portfolio-grid"><div class="portfolio-item tilt-card fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/building-a-successful-femtech-app/" target="_blank">Read Article →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Why "Mental Flossing" is Your Last Hope?</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanch100/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-a1c22e0e980c" target="_blank">Read on Medium →</a></div><div class="portfolio-item tilt-card fade-in"><h3>The Ultimate Guide to Web3 Wallets</h3><p>A beginner-friendly but comprehensive guide explaining the types and security of Web3 crypto wallets.</p><a href="#" target="_blank">Read Guide →</a></div><div class="portfolio-item tilt-card fade-in"><h3>API Documentation Best Practices</h3><p>A detailed article for developers and technical writers on creating clear, effective API documentation.</p><a href="#" target="_blank">View Practices →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Content Strategy for B2B SaaS</h3><p>Exploring high-level strategies for using content to drive lead generation and user retention for SaaS companies.</p><a href="#" target="_blank">Read Strategy →</a></div></div></section>
         <section id="skills" class="fade-in"><h2>Expertise</h2><ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li></ul></section>
         <section id="contact" class="fade-in"><h2>Get In Touch</h2><div class="contact-info"><p>I'm open to freelance opportunities and collaborations. Let's create something great together!</p><div class="social-links"><a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a><a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a><a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a></div></div></section>
     </main>
     <footer><p>© 2024 Sayan Chakraborty. Crafted with passion.</p></footer>
 
     <script>
-        // CORRECTED, FULLY-FUNCTIONAL SCRIPT BLOCK
         document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Logic
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
-
-            // Theme Toggle Logic
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                body.classList.add(savedTheme + '-mode');
-            }
+            if (savedTheme) body.classList.add(savedTheme + '-mode');
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
-                if (body.classList.contains('light-mode')) {
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    localStorage.removeItem('theme');
-                }
+                localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : '');
             });
 
-            // Scroll Fade-In Animation
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
+            // Scroll Fade-In
+            const observer = new IntersectionObserver((e) => e.forEach(entry => entry.isIntersecting && (entry.target.classList.add('visible'), observer.unobserve(entry.target)))), { threshold: 0.1 });
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-            // Trailing Particles Animation
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null };
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            document.addEventListener('mousemove', (e) => {
-                mouse.x = e.x; mouse.y = e.y;
-                for (let i = 0; i < 2; i++) { particles.push(new Particle()); }
-            });
-            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-            class Particle {
-                constructor() {
-                    this.x = mouse.x; this.y = mouse.y;
-                    this.size = Math.random() * 2 + 1;
-                    this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1;
-                    this.life = 1;
-                }
-                update() {
-                    this.x += this.speedX; this.y += this.speedY;
-                    this.life -= 0.02;
-                    if (this.size > 0.1) this.size -= 0.03;
-                }
-                draw() {
-                    const currentAccent = getComputedStyle(document.body).getPropertyValue('--primary-accent').trim();
-                    ctx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.life * 100}%, transparent)`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = particles.length - 1; i >= 0; i--) {
-                    particles[i].update(); particles[i].draw();
-                    if (particles[i].life <= 0 || particles[i].size <= 0.1) { particles.splice(i, 1); }
-                }
-                requestAnimationFrame(animateParticles);
-            }
+            // Particle Trail
+            const particleCanvas = document.getElementById('particle-canvas');
+            const pCtx = particleCanvas.getContext('2d');
+            let particles = [], mouse = { x: null, y: null };
+            resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+            document.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; for (let i = 0; i < 2; i++) particles.push(new Particle()); });
+            function resizeCanvas() { particleCanvas.width = window.innerWidth; particleCanvas.height = window.innerHeight; }
+            class Particle { constructor() { this.x = mouse.x; this.y = mouse.y; this.size = Math.random() * 2 + 1; this.speedX = Math.random() * 2 - 1; this.speedY = Math.random() * 2 - 1; this.life = 1; } update() { this.x += this.speedX; this.y += this.speedY; this.life -= 0.02; if (this.size > 0.1) this.size -= 0.03; } draw() { const currentAccent = getComputedStyle(document.body).getPropertyValue('--primary-accent').trim(); pCtx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.life * 100}%, transparent)`; pCtx.beginPath(); pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2); pCtx.fill(); } }
+            function animateParticles() { pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height); particles.forEach((p, i) => { p.update(); p.draw(); if (p.life <= 0 || p.size <= 0.1) particles.splice(i, 1); }); requestAnimationFrame(animateParticles); }
             animateParticles();
 
-            // 3D "Glass" Tilt Effect
-            document.querySelectorAll('.tilt-card').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-                    const { width, height } = rect;
-                    const rotateX = (y / height - 0.5) * -12;
-                    const rotateY = (x / width - 0.5) * 12;
-                    card.style.transform = `scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'scale(1) rotateX(0deg) rotateY(0deg)';
-                });
-            });
+            // 3D Tilt
+            document.querySelectorAll('.tilt-card').forEach(c => { c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, { width: w, height: h } = r, rx = (y / h - 0.5) * -12, ry = (x / w - 0.5) * 12; c.style.transform = `scale(1.03) rotateX(${rx}deg) rotateY(${ry}deg)`; }); c.addEventListener('mouseleave', () => { c.style.transform = 'scale(1) rotateX(0) rotateY(0)'; }); });
 
-            // Firefly Effect
-            const fireflyContainer = document.getElementById('firefly-container');
-            function createFirefly() {
-                const firefly = document.createElement('div');
-                firefly.className = 'firefly';
-                const size = Math.random() * 6 + 2;
-                const duration = Math.random() * 4 + 3;
-                firefly.style.width = `${size}px`;
-                firefly.style.height = `${size}px`;
-                firefly.style.left = `${Math.random() * 100}%`;
-                firefly.style.top = `${Math.random() * 100}%`;
-                firefly.style.animationDuration = `${duration}s`;
-                firefly.style.animationDelay = `${Math.random() * 5}s`;
-                fireflyContainer.appendChild(firefly);
-                setTimeout(() => {
-                    firefly.remove();
-                }, (duration + 5) * 1000);
+            // Interactive Glow Balls
+            const ballContainer = document.getElementById('glow-ball-container');
+            const glowBalls = [];
+            const numBalls = 6;
+            for (let i = 0; i < numBalls; i++) {
+                const ball = document.createElement('div');
+                ball.classList.add('glow-ball');
+                ballContainer.appendChild(ball);
+                glowBalls.push({
+                    element: ball,
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    size: Math.random() * 200 + 150,
+                });
+                ball.style.width = ball.style.height = `${glowBalls[i].size}px`;
             }
-            setInterval(createFirefly, 400);
+
+            function updateGlowBalls() {
+                glowBalls.forEach(ball => {
+                    const dx = ball.x - mouse.x;
+                    const dy = ball.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const repelForce = 300;
+
+                    if (dist < repelForce) {
+                        const angle = Math.atan2(dy, dx);
+                        const force = (repelForce - dist) / repelForce * 2;
+                        ball.vx += Math.cos(angle) * force;
+                        ball.vy += Math.sin(angle) * force;
+                    }
+
+                    // Drift
+                    ball.x += ball.vx;
+                    ball.y += ball.vy;
+
+                    // Friction
+                    ball.vx *= 0.96;
+                    ball.vy *= 0.96;
+
+                    // Wall bounce
+                    if (ball.x < 0 - ball.size || ball.x > window.innerWidth + ball.size) ball.vx *= -1;
+                    if (ball.y < 0 - ball.size || ball.y > window.innerHeight + ball.size) ball.vy *= -1;
+
+                    ball.element.style.transform = `translate(${ball.x}px, ${ball.y}px)`;
+                });
+                requestAnimationFrame(updateGlowBalls);
+            }
+            updateGlowBalls();
         });
     </script>
 </body>
