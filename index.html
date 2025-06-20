@@ -84,10 +84,68 @@
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
         a:hover { color: color-mix(in srgb, var(--primary-accent) 80%, var(--text-color) 20%); }
 
-        .header { text-align: center; padding: 4rem 1rem 5rem 1rem; }
-        .profile-picture { width: 160px; height: 160px; border-radius: 12px; border: 3px solid var(--primary-accent); object-fit: cover; margin: 0 auto 30px auto; box-shadow: 0 0 25px color-mix(in srgb, var(--primary-accent) 40%, transparent); }
-        .header h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; }
-        .header .tagline { font-size: 1.2rem; color: var(--text-muted); font-weight: 300; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 20px 5rem 20px;
+        }
+        .header-text-container {
+            text-align: left;
+        }
+        .profile-picture {
+            width: 160px;
+            height: 160px;
+            border-radius: 12px;
+            border: 3px solid var(--primary-accent);
+            object-fit: cover;
+            margin-left: 40px;
+            box-shadow: 0 0 25px color-mix(in srgb, var(--primary-accent) 40%, transparent);
+            flex-shrink: 0;
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: -1px;
+            position: relative;
+        }
+        .header .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        
+        /* Glitch Effect on H1 Hover */
+        .glitch-hover:hover::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 2px;
+            width: 100%; height: 100%;
+            text-shadow: -1px 0 var(--primary-accent);
+            background: transparent;
+            animation: glitch-noise 2s linear infinite alternate-reverse;
+            overflow: hidden;
+        }
+        .glitch-hover:hover::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: -2px;
+            width: 100%; height: 100%;
+            text-shadow: -1px 0 #00ffff, 1px 1px #ff00ff;
+            background: transparent;
+            animation: glitch-noise2 2s linear infinite alternate-reverse;
+            overflow: hidden;
+        }
+        @keyframes glitch-noise {
+          0% { clip-path: inset(3% 0 94% 0); } 20% { clip-path: inset(85% 0 1% 0); } 40% { clip-path: inset(54% 0 7% 0); } 60% { clip-path: inset(21% 0 78% 0); } 80% { clip-path: inset(93% 0 4% 0); } 100% { clip-path: inset(45% 0 53% 0); }
+        }
+        @keyframes glitch-noise2 {
+          0% { clip-path: inset(98% 0 1% 0); } 20% { clip-path: inset(18% 0 81% 0); } 40% { clip-path: inset(89% 0 8% 0); } 60% { clip-path: inset(45% 0 54% 0); } 80% { clip-path: inset(4% 0 95% 0); } 100% { clip-path: inset(79% 0 13% 0); }
+        }
 
         section { padding: 50px 20px; border-bottom: 1px solid color-mix(in srgb, var(--primary-accent) 15%, transparent); }
         section:last-of-type { border-bottom: none; }
@@ -96,7 +154,7 @@
         .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-        #about p { font-size: 1.1rem; text-align: center; max-width: 750px; margin: 0 auto; }
+        #about p { font-size: 1.1rem; text-align: center; max-width: 750px; margin: 0 auto; line-height: 1.6; }
 
         .timeline { position: relative; max-width: 750px; margin: 0 auto; }
         .timeline::after { content: ''; position: absolute; width: 2px; background-color: color-mix(in srgb, var(--primary-accent) 30%, transparent); top: 0; bottom: 0; left: 50%; transform: translateX(-50%); }
@@ -125,11 +183,23 @@
         footer { text-align: center; padding: 20px; background: transparent; color: var(--text-muted); font-size: 0.9rem; }
         
         @media screen and (max-width: 768px) {
+            .header {
+                flex-direction: column-reverse;
+                gap: 30px;
+            }
+            .profile-picture {
+                margin: 0 auto;
+            }
+            .header-text-container {
+                text-align: center;
+            }
+            .header h1 {
+                font-size: 2.5rem;
+            }
             .timeline::after { left: 20px; }
             .timeline-item { width: 100%; padding-left: 50px; padding-right: 0; }
             .timeline-item.right { left: 0%; }
             .timeline-item.left::after, .timeline-item.right::after { left: 20px; transform: translateX(-50%); }
-            .header h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -140,18 +210,23 @@
     <canvas id="particle-canvas"></canvas>
 
     <header class="header">
-        <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture">
-        <h1>Sayan Chakraborty</h1>
-        <p class="tagline">I write SaaS • Web3 • Tech • Gaming</p>
+        <div class="header-text-container">
+            <h1 class="glitch-hover" data-text="Sayan Chakraborty">Sayan Chakraborty</h1>
+            <p class="tagline">I write SaaS • Web3 • Tech • Gaming</p>
+        </div>
+        <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture tilt-card">
     </header>
 
     <main class="container">
         <!-- Content Sections -->
-        <section id="about" class="fade-in"><h2>About Me</h2><p>Versatile individual with a rather unconventional career path. Mechanical engineer turned content writer. Near 5 years exp. cooking content that ranks. I seek opportunities where I can learn, act, and deliver. Scroll down for more!</p></section>
-        <section id="experience" class="fade-in"><h2>Work Experience</h2><div class="timeline"><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div></div></section>
+        <section id="about" class="fade-in">
+            <h2>About Me</h2>
+            <p>Versatile individual with a rather unconventional career path. Mechanical engineer turned content writer. Near 5 years exp. cooking content that ranks. I seek opportunities where I can learn, act, and deliver. Scroll down for more!</p>
+        </section>
+        <section id="experience" class="fade-in"><h2>Where I've Been Cooking</h2><div class="timeline"><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div><div class="timeline-item right fade-in"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div><div class="timeline-item left fade-in"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div></div></section>
         <section id="portfolio" class="fade-in"><h2>Things I've Cooked</h2><div class="portfolio-grid"><div class="portfolio-item tilt-card fade-in"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/femtech-app-development/" target="_blank">Read Article →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Why “Mental Flossing” is Your Last Hope to ...</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanwashere/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-fdec60e280b3" target="_blank">Read on Medium →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Lorem Ipsum</h3><p>A beginner-friendly Lorem Ipsum</p><a href="#" target="_blank">Read Guide →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Lorem Ipsum</h3><p>Lorem Ipsum is beginner-friendly</p><a href="#" target="_blank">View Practices →</a></div><div class="portfolio-item tilt-card fade-in"><h3>Lorem Ipsum</h3><p>Exploring high-level Lorem Ipsum</p><a href="#" target="_blank">Read Strategy →</a></div></div></section>
-        <section id="skills" class="fade-in"><h2>What I Can Help You Cook</h2><ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AI Proficiency</li><li>Graphics Designing</li><li>Email Marketing</li></ul></section>
-        <section id="contact" class="fade-in"><h2>Get In Touch</h2><div class="contact-info"><p>Hit me up for freelance/contractual opportunities and collaborations. Let's cook something great together!</p><div class="social-links"><a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a><a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a><a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a></div></div></section>
+        <section id="skills" class="fade-in"><h2>What I Can Help You Cook</h2><ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AEO/GEO</li><li>Graphics Designing</li><li>Email Marketing</li></ul></section>
+        <section id="contact" class="fade-in"><h2>Get In Touch</h2><div class="contact-info"><p>Open to freelance/contractual opportunities and collaborations. Let's cook sumthin' great together!</p><div class="social-links"><a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a><a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a><a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a></div></div></section>
     </main>
     <footer><p>© 2025 Sayan Chakraborty. passionately crafted.</p></footer>
 
