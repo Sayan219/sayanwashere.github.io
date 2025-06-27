@@ -6,10 +6,10 @@
     
     <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- REMOVED Adobe Fonts and REPLACED with reliable Google Fonts -->
+    <!-- UPDATED: Replaced previous fonts with Major Mono Display & Roboto Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Roboto+Mono:wght@100&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -41,9 +41,9 @@
         html { cursor: none; }
 
         body {
-            /* UPDATED: Using Nunito for body text */
-            font-family: 'Nunito', sans-serif;
-            font-weight: 400;
+            /* UPDATED: Using Roboto Mono Thin for body text */
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 100; /* Thin weight */
             color: var(--text-color);
             background-color: var(--bg-color-start);
             background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
@@ -82,12 +82,12 @@
         body.light-mode #theme-toggle .fa-moon { display: none; }
         body.light-mode #theme-toggle .fa-sun { display: block; }
 
-        /* UPDATED: Using Montserrat for headings */
+        /* UPDATED: Using Major Mono Display for headings */
         h1, h2, h3 { 
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Major Mono Display', monospace;
             color: var(--primary-accent); 
             text-shadow: none; 
-            font-weight: 700;
+            font-weight: 400; /* This font only has one weight (regular) */
         }
         .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
@@ -119,13 +119,13 @@
         .header h1 {
             font-size: 3rem;
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: 1px; /* Adjusted spacing for mono font */
             position: relative;
         }
         .header .tagline {
             font-size: 1.2rem;
             color: var(--text-muted);
-            font-weight: 400; 
+            font-weight: 100; /* Use thin weight */
         }
         
         /* Glitch Effect on H1 Hover */
@@ -181,7 +181,7 @@
         .portfolio-item { background: var(--card-bg); border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent); border-radius: 12px; padding: 25px; backdrop-filter: blur(10px); transition: transform 0.1s ease-out; transform-style: preserve-3d; }
         
         .skills-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-        .skills-list li { background: transparent; padding: 10px 20px; border-radius: 5px; border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 400; transition: all 0.3s ease; }
+        .skills-list li { background: transparent; padding: 10px 20px; border-radius: 5px; border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 100; transition: all 0.3s ease; }
         .skills-list li:hover { background: var(--primary-accent); color: var(--bg-color-start); }
 
         .contact-info { text-align: center; }
