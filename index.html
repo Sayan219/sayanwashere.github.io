@@ -6,8 +6,8 @@
     
     <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- Adobe Fonts: Articulat CF & Marydale -->
-    <link rel="stylesheet" href="https://use.typekit.net/jhs3mli.css">
+    <!-- Adobe Fonts Kit -->
+    <link rel="stylesheet" href="https://use.typekit.net/jmn4fms.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -39,8 +39,8 @@
         html { cursor: none; }
 
         body {
-            /* Use Marydale for body text, with fallbacks */
-            font-family: "marydale", sans-serif;
+            font-family: 'marydale', sans-serif;
+            font-weight: 400;
             color: var(--text-color);
             background-color: var(--bg-color-start);
             background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
@@ -79,8 +79,7 @@
         body.light-mode #theme-toggle .fa-moon { display: none; }
         body.light-mode #theme-toggle .fa-sun { display: block; }
 
-        /* Use Articulat CF for prominent headings, with fallbacks */
-        h1, h2, h3 { font-family: "articulat-cf", sans-serif; color: var(--primary-accent); text-shadow: none; font-weight: 700; }
+        h1, h2, h3 { font-family: 'articulat-cf', sans-serif; color: var(--primary-accent); text-shadow: none; font-weight: 800; }
         .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
         a:hover { color: color-mix(in srgb, var(--primary-accent) 80%, var(--text-color) 20%); }
@@ -117,7 +116,7 @@
         .header .tagline {
             font-size: 1.2rem;
             color: var(--text-muted);
-            font-weight: 300;
+            font-weight: 400; /* Using regular weight available for Marydale font */
         }
         
         /* Glitch Effect on H1 Hover */
