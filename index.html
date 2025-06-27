@@ -6,8 +6,10 @@
     
     <title>Sayan Chakraborty | Technical Content Writer</title>
 
-    <!-- CORRECTED: Added Adobe Fonts stylesheet link -->
-    <link rel="stylesheet" href="https://use.typekit.net/jmn4fms.css">
+    <!-- REMOVED Adobe Fonts and REPLACED with reliable Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Nunito:wght@400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -39,10 +41,9 @@
         html { cursor: none; }
 
         body {
-            /* Using Marydale for body text */
-            font-family: marydale, sans-serif;
-            font-weight: 400; /* As requested */
-            font-style: normal;
+            /* UPDATED: Using Nunito for body text */
+            font-family: 'Nunito', sans-serif;
+            font-weight: 400;
             color: var(--text-color);
             background-color: var(--bg-color-start);
             background-image: linear-gradient(135deg, var(--bg-color-start) 40%, var(--bg-color-end) 100%);
@@ -81,13 +82,12 @@
         body.light-mode #theme-toggle .fa-moon { display: none; }
         body.light-mode #theme-toggle .fa-sun { display: block; }
 
-        /* Using Articulat CF for headings */
+        /* UPDATED: Using Montserrat for headings */
         h1, h2, h3 { 
-            font-family: 'articulat-cf', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             color: var(--primary-accent); 
             text-shadow: none; 
-            font-weight: 800; /* As requested */
-            font-style: normal;
+            font-weight: 700;
         }
         .container { max-width: 960px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
         a { color: var(--primary-accent); text-decoration: none; transition: color 0.3s ease; }
@@ -125,7 +125,7 @@
         .header .tagline {
             font-size: 1.2rem;
             color: var(--text-muted);
-            font-weight: 400; /* Correct weight for Marydale Regular */
+            font-weight: 400; 
         }
         
         /* Glitch Effect on H1 Hover */
