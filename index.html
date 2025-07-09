@@ -36,103 +36,74 @@
             --spotlight-color: rgba(0, 123, 255, 0.1);
         }
 
-        html { 
-            background-color: var(--bg-color);
-        }
-        body {
-            /* --- UPDATED --- Hides default cursor */
-            cursor: none; 
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 300;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+        html { background-color: var(--bg-color); }
+        body { cursor: none; background-color: var(--bg-color); color: var(--text-color); font-family: 'Roboto Mono', monospace; font-weight: 300; margin: 0; padding: 0; overflow: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
 
-        /* --- NEW: CUSTOM CURSOR STYLING --- */
+        /* --- UPDATED: HOLLOW POINTER CURSOR --- */
         #custom-cursor {
             position: fixed;
             width: 28px;
             height: 28px;
-            /* Base64 encoded pixelated arrow SVG. Color can be changed by 'fill'. */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='%23ffffff'%3E%3Cpath d='M1,1V20.5L8,13.5H15.5Z'/%3E%3Cpath d='M2,2V18.79L8.38,13H14.5V2Z'/%3E%3C/svg%3E");
+            /* Base64 encoded hollow pointer SVG. Stroke color is currentColor. */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z'/%3E%3C/svg%3E");
             background-size: contain;
-            pointer-events: none; /* Allows clicks to pass through */
-            transform: translate(-5px, -2px); /* Offset to align pointer tip with actual cursor */
+            pointer-events: none;
+            transform: translate(-3px, -3px);
             z-index: 10000;
-            transition: transform 0.2s ease;
-            animation: glowing-cursor 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 5px var(--primary-accent));
+            animation: glowing-cursor-border 4s ease-in-out infinite;
         }
-
-        @keyframes glowing-cursor {
-            0%   { filter: drop-shadow(0 0 5px var(--primary-accent)); }
+        @keyframes glowing-cursor-border {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--primary-accent)); }
             33%  { filter: drop-shadow(0 0 7px #00ffff); }
             66%  { filter: drop-shadow(0 0 7px #ff00ff); }
-            100% { filter: drop-shadow(0 0 5px var(--primary-accent)); }
         }
-
-        /* Glitch effect pseudo-elements */
-        #custom-cursor::before, #custom-cursor::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: inherit;
-            display: none; /* Hidden by default */
-            animation: cursor-glitch-anim 0.3s infinite alternate;
-        }
-
-        /* Class added on mousedown */
-        #custom-cursor.glitching::before {
-            display: block;
-            /* Cyan layer */
-            filter: hue-rotate(180deg) brightness(1.5);
-        }
-        #custom-cursor.glitching::after {
-            display: block;
-            /* Magenta layer */
-            filter: hue-rotate(90deg) brightness(1.5);
-            animation-delay: -0.15s;
-        }
+        #custom-cursor::before, #custom-cursor::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: inherit; display: none; animation: cursor-glitch-anim 0.3s infinite alternate; }
+        #custom-cursor.glitching::before { display: block; filter: hue-rotate(180deg) brightness(1.5); }
+        #custom-cursor.glitching::after { display: block; filter: hue-rotate(90deg) brightness(1.5); animation-delay: -0.15s; }
+        @keyframes cursor-glitch-anim { 0% { transform: translate(-3px, -4px); } 100% { transform: translate(4px, 3px); } }
         
-        @keyframes cursor-glitch-anim {
-            0% { transform: translate(-3px, -4px); }
-            100% { transform: translate(4px, 3px); }
-        }
-        
-        #grid-canvas { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 0; 
-            pointer-events: none; 
-        }
+        /* --- NEW: Hide default cursor on interactive elements --- */
+        a, button, .nav-link, .skill-button { cursor: none; }
 
-        #spotlight {
-            position: fixed;
-            width: 800px; height: 800px;
-            border-radius: 50%;
-            background-image: radial-gradient(circle, var(--spotlight-color) 0%, transparent 60%);
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 1;
-            transition: background-image 0.3s ease;
-        }
-
-        .interface-wrapper {
-            display: grid;
-            grid-template-areas: "header" "main" "footer";
-            grid-template-rows: auto 1fr auto;
-            height: 100vh;
-            padding: 25px;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 2;
-        }
-        
+        #grid-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        #spotlight { position: fixed; width: 800px; height: 800px; border-radius: 50%; background-image: radial-gradient(circle, var(--spotlight-color) 0%, transparent 60%); transform: translate(-50%, -50%); pointer-events: none; z-index: 1; transition: background-image 0.3s ease; }
+        .interface-wrapper { display: grid; grid-template-areas: "header" "main" "footer"; grid-template-rows: auto 1fr auto; height: 100vh; padding: 25px; box-sizing: border-box; position: relative; z-index: 2; }
         #command-bar { grid-area: header; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--interface-border-color); padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
-        #command-bar .logo { font-family: 'Major Mono Display', monospace; font-size: 1.5rem; color: var(--primary-accent); }
+
+        /* --- NEW: GLITCHING LOGO TEXT --- */
+        .logo {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--primary-accent);
+            position: relative;
+            animation: constant-glitch-color 5s infinite linear;
+        }
+        .logo::before, .logo::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            overflow: hidden;
+        }
+        .logo::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff00ff;
+            animation: constant-glitch1 2s infinite linear alternate-reverse;
+        }
+        .logo::after {
+            left: -2px;
+            text-shadow: -1px 0 #00ffff;
+            animation: constant-glitch2 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes constant-glitch1 { 0% { clip-path: inset(10% 0 85% 0); } 20% { clip-path: inset(90% 0 1% 0); } 40% { clip-path: inset(45% 0 45% 0); } 60% { clip-path: inset(15% 0 75% 0); } 80% { clip-path: inset(80% 0 5% 0); } 100% { clip-path: inset(50% 0 40% 0); } }
+        @keyframes constant-glitch2 { 0% { clip-path: inset(95% 0 2% 0); } 20% { clip-path: inset(5% 0 90% 0); } 40% { clip-path: inset(70% 0 20% 0); } 60% { clip-path: inset(40% 0 50% 0); } 80% { clip-path: inset(2% 0 88% 0); } 100% { clip-path: inset(65% 0 25% 0); } }
+        @keyframes constant-glitch-color { 0%, 100% { color: var(--primary-accent); } 50% { color: var(--text-color); } }
+
+
         #command-bar nav a { margin: 0 10px; color: var(--text-muted); text-decoration: none; transition: all 0.3s ease; }
         #command-bar nav a:hover, #command-bar nav a.active { color: var(--primary-accent); text-shadow: 0 0 5px var(--primary-accent); }
         #content-pane { grid-area: main; overflow-y: auto; padding: 40px 15px; position: relative; }
@@ -147,7 +118,7 @@
         #theme-toggle .fa-sun { display: none; }
         body.light-mode #theme-toggle .fa-moon { display: none; }
         body.light-mode #theme-toggle .fa-sun { display: block; }
-        h1, h2, h3 {  font-family: 'Major Mono Display', monospace; color: var(--primary-accent); font-weight: 400; }
+        h1, h2, h3 { font-family: 'Major Mono Display', monospace; color: var(--primary-accent); font-weight: 400; }
         section { display: none; animation: fadeIn 0.8s ease-out forwards; }
         section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -155,15 +126,11 @@
         @keyframes typing { from { width: 0 } to { width: 100% } }
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary-accent); } }
         #content-pane.glitching { animation: content-glitch 0.4s linear; }
-        @keyframes content-glitch {
-            0%, 100% { transform: translate(0, 0); opacity: 1; } 10% { transform: translate(-5px, -5px); } 20% { transform: translate(5px, 5px); }
-            30% { transform: translate(-5px, 5px); } 40% { transform: translate(5px, -5px); } 50% { opacity: 0.8; clip-path: inset(40% 0 40% 0); }
-            60% { transform: translate(-5px, -5px); } 70% { transform: translate(5px, 5px); } 80% { clip-path: inset(80% 0 10% 0); } 90% { transform: translate(0, 0); }
-        }
+        @keyframes content-glitch { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; clip-path: inset(40% 0 40% 0); transform: translateX(10px); } }
         .header { display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto; padding: 2rem 20px 3rem 20px; }
         .header-text-container { text-align: left; }
         .profile-picture { width: 200px; height: 200px; border-radius: 15px; border: 3px solid var(--primary-accent); object-fit: cover; margin-left: 40px; box-shadow: 0 0 25px color-mix(in srgb, var(--primary-accent) 40%, transparent); flex-shrink: 0; transition: transform 0.1s ease-out; transform-style: preserve-3d; }
-        .header h1 { font-size: 3rem; margin: 0; letter-spacing: 1px; position: relative; }
+        .header h1 { font-size: 3rem; margin: 0; letter-spacing: 1px; }
         .header .tagline { font-size: 1.2rem; color: var(--text-muted); font-weight: 300; }
         #about p { font-size: 1.1rem; text-align: center; max-width: 750px; margin: 0 auto; line-height: 1.6; }
         .timeline { position: relative; max-width: 750px; margin: 0 auto; }
@@ -176,9 +143,32 @@
         .timeline-content .date { font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px; display: block; }
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .portfolio-item { background: var(--card-bg); border: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent); border-radius: 12px; padding: 25px; backdrop-filter: blur(10px); transition: transform 0.1s ease-out; transform-style: preserve-3d; }
-        .skills-list { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-        .skills-list li { background: transparent; padding: 10px 20px; border-radius: 5px; border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 300; transition: all 0.3s ease; }
-        .skills-list li:hover { background: var(--primary-accent); color: var(--bg-color); }
+        
+        /* --- NEW: SKILLS SECTION OVERHAUL --- */
+        .skills-scroller { display: flex; overflow-x: auto; white-space: nowrap; padding-bottom: 20px; margin-bottom: 30px; -ms-overflow-style: none; scrollbar-width: none; }
+        .skills-scroller::-webkit-scrollbar { display: none; }
+        .skill-button {
+            flex-shrink: 0; background: transparent; padding: 10px 20px; margin-right: 15px; border-radius: 5px;
+            border: 1px solid var(--primary-accent); color: var(--primary-accent); font-weight: 300;
+            transition: all 0.3s ease;
+        }
+        .skill-button:hover, .skill-button.active { background: var(--primary-accent); color: var(--bg-color); }
+        #skill-description-pane {
+            min-height: 100px;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        #skill-description-pane::after {
+            content: '_';
+            animation: blink-caret .75s step-end infinite;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
         #contact p { font-size: 1.1rem; margin-bottom: 30px; text-align: center; }
         #contact .large-social-links { text-align: center; }
         #contact .large-social-links a { font-size: 2.5rem; color: var(--text-color); margin: 0 20px; transition: color 0.3s ease, transform 0.3s ease; }
@@ -198,16 +188,14 @@
 </head>
 <body>
     
-    <!-- --- NEW: Custom cursor element --- -->
     <div id="custom-cursor"></div>
-
     <canvas id="grid-canvas"></canvas>
     <div id="spotlight"></div>
 
     <div class="interface-wrapper">
         <header id="command-bar">
-            <!-- Content as before -->
-            <div class="logo glitch-hover" data-text="S.C.">S.C.</div>
+            <!-- UPDATED: Glitching logo text -->
+            <div class="logo" data-text="welcome // cookin' lab">welcome // cookin' lab</div>
             <nav>
                 <a href="#about" class="nav-link active">// about_me</a>
                 <a href="#experience" class="nav-link">// the_kitchen</a>
@@ -219,29 +207,41 @@
         </header>
 
         <main id="content-pane">
-            <!-- All section content remains the same as before -->
+            <!-- About, Experience, Portfolio, Contact sections are the same -->
             <section id="about" class="active">
                 <header class="header">
                     <div class="header-text-container">
-                        <h1 class="glitch-hover" data-text="Sayan Chakraborty">Sayan Chakraborty</h1>
+                        <h1 data-text="Sayan Chakraborty">Sayan Chakraborty</h1>
                         <p class="tagline">I write SaaS • Web3 • Tech • Gaming</p>
                     </div>
                     <img src="profile.jpg" alt="Sayan Chakraborty profile picture" class="profile-picture tilt-card">
                 </header>
                 <p>Versatile individual with a rather unconventional career path. Mechanical engineer turned content writer. Near 5 years exp. cooking content that ranks. I seek opportunities where I can learn, act, and deliver.</p>
             </section>
-            
             <section id="experience"><div class="typewriter"><h2>// The Kitchen</h2></div><div class="timeline"><div class="timeline-item left"><div class="timeline-content tilt-card"><h3>Technical Content Writer</h3><span class="date">MGT-COMMERCE GmbH | Feb 2024 - Present</span><p>Crafting in-depth technical documentation and articles for a leading e-commerce solutions provider. Based in Berlin, Germany (Remote).</p></div></div><div class="timeline-item right"><div class="timeline-content tilt-card"><h3>Technical Content & Copywriter</h3><span class="date">Idea Usher | Dec 2022 - Aug 2023</span><p>Developed SEO content, pitch decks, YouTube scripts, email drips, and social media posts for various tech clients.</p></div></div><div class="timeline-item left"><div class="timeline-content tilt-card"><h3>Content Writer</h3><span class="date">NFTICALLY | Sep 2021 - Sep 2022</span><p>Curated on-page/off-page blogs, PRs, whitepapers, and marketing content in the fast-paced Web3 and NFT space.</p></div></div><div class="timeline-item right"><div class="timeline-content tilt-card"><h3>Freelance Creative Writer</h3><span class="date">Fandomical | Jan 2021 - Nov 2021</span><p>Wrote quizzes and engaging short-form content on popular TV series, animes, and cinematic universes.</p></div></div><div class="timeline-item left"><div class="timeline-content tilt-card"><h3>Academic Content Writer</h3><span class="date">Writotech Solutions | Nov 2020 - Feb 2021</span><p>Produced high-quality academic content, honing research and formal writing skills.</p></div></div></div></section>
-            
             <section id="portfolio"><div class="typewriter"><h2>// The Menu</h2></div><div class="portfolio-grid"><div class="portfolio-item tilt-card"><h3>Magento 2 CMS Page Hierarchy</h3><p>A technical tutorial on managing CMS page hierarchies in Magento 2, written for MGT-COMMERCE.</p><a href="https://www.mgt-commerce.com/tutorial/magento-2-cms-page-hierarchy/" target="_blank">Read Tutorial →</a></div><div class="portfolio-item tilt-card"><h3>Building a Successful Femtech App</h3><p>An in-depth strategy guide for developing applications in the Femtech industry, written for Idea Usher.</p><a href="https://ideausher.com/blog/femtech-app-development/" target="_blank">Read Article →</a></div><div class="portfolio-item tilt-card"><h3>Why “Mental Flossing” is Your Last Hope to ...</h3><p>A thought-provoking piece on escaping "brainrot" and reclaiming mental clarity. Published on Medium.</p><a href="https://medium.com/@sayanwashere/why-mental-flossing-is-your-last-hope-to-escape-from-brainrot-fdec60e280b3" target="_blank">Read on Medium →</a></div><div class="portfolio-item tilt-card"><h3>Lorem Ipsum</h3><p>A beginner-friendly Lorem Ipsum</p><a href="#" target="_blank">Read Guide →</a></div><div class="portfolio-item tilt-card"><h3>Lorem Ipsum</h3><p>Lorem Ipsum is beginner-friendly</p><a href="#" target="_blank">View Practices →</a></div><div class="portfolio-item tilt-card"><h3>Lorem Ipsum</h3><p>Exploring high-level Lorem Ipsum</p><a href="#" target="_blank">Read Strategy →</a></div></div></section>
             
-            <section id="skills"><div class="typewriter"><h2>// The Recipe</h2></div><ul class="skills-list"><li>Technical Content</li><li>SEO Strategy</li><li>SaaS & Web3</li><li>Copywriting</li><li>Content Marketing</li><li>Critical Research</li><li>AEO/GEO</li><li>Graphics Designing</li><li>Email Marketing</li></ul></section>
+            <!-- UPDATED: SKILLS SECTION -->
+            <section id="skills">
+                <div class="typewriter"><h2>// The Recipe</h2></div>
+                <div class="skills-scroller">
+                    <button class="skill-button" data-description="Deep dives into complex topics. I translate dev-speak into clear, concise documentation and tutorials that users actually understand.">Technical Content</button>
+                    <button class="skill-button" data-description="Not just keywords. I build content pillars, map user intent, and create articles that climb SERPs and deliver organic traffic.">SEO Strategy</button>
+                    <button class="skill-button" data-description="Fluent in the future. I craft narratives for decentralized tech and software products, from whitepapers to user acquisition copy.">SaaS & Web3</button>
+                    <button class="skill-button" data-description="Words that convert. Landing pages, ads, emails—I write copy that grabs attention and drives action. No fluff.">Copywriting</button>
+                    <button class="skill-button" data-description="Building your brand's authority. I develop and execute strategies that attract, engage, and retain your target audience.">Content Marketing</button>
+                    <button class="skill-button" data-description="I go beyond the first page of Google. In-depth analysis, data synthesis, and fact-checking to build content on a foundation of truth.">Critical Research</button>
+                    <button class="skill-button" data-description="Answer Engine and Geo-fenced Optimization. I structure content for voice search, featured snippets, and localized discovery.">AEO/GEO</button>
+                    <button class="skill-button" data-description="Visuals that support the message. I create clean, effective graphics and branding assets for articles, social media, and UI mockups.">Graphics Designing</button>
+                    <button class="skill-button" data-description="Nurturing leads, not annoying them. I write compelling email sequences and newsletters that build relationships and convert.">Email Marketing</button>
+                </div>
+                <div id="skill-description-pane"></div>
+            </section>
             
             <section id="contact"><div class="typewriter"><h2>// Get In Touch</h2></div><p>Open to freelance/contractual opportunities and collaborations. Let's cook sumthin' great together!</p><div class="large-social-links"><a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a><a href="https://www.linkedin.com/in/sayanwashere" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a><a href="tel:+919475559461" title="Phone"><i class="fas fa-phone"></i></a></div></section>
         </main>
 
         <footer id="interface-footer">
-             <!-- Content as before -->
             <span>© 2025 Sayan Chakraborty. passionately crafted.</span>
             <div class="social-links">
                 <a href="mailto:sayanch100@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
@@ -259,10 +259,9 @@
         const contentPane = document.getElementById('content-pane');
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('#content-pane section');
-        let mouse = { x: null, y: null };
-
-        // --- NEW: Get cursor element ---
         const customCursor = document.getElementById('custom-cursor');
+        let mouse = { x: null, y: null };
+        let typeWriterInterval; // To control the typewriter
 
         // 1. --- THEME MANAGEMENT ---
         const savedTheme = localStorage.getItem('theme');
@@ -271,67 +270,56 @@
             body.classList.toggle('light-mode');
             localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : '');
         });
-
+        
         // 2. --- INTERFACE NAVIGATION ---
+        function showSection(targetId) {
+            const targetSection = document.querySelector(targetId);
+            if (!targetSection || targetSection.classList.contains('active')) return;
+
+            contentPane.classList.add('glitching');
+            setTimeout(() => {
+                navLinks.forEach(l => l.classList.remove('active'));
+                document.querySelector(`.nav-link[href="${targetId}"]`)?.classList.add('active');
+                
+                sections.forEach(s => s.classList.remove('active'));
+                targetSection.classList.add('active');
+                
+                contentPane.scrollTop = 0;
+                contentPane.classList.remove('glitching');
+
+                // If the skills section is shown, initialize it
+                if (targetId === '#skills') {
+                    initializeSkillsSection();
+                }
+            }, 400);
+        }
+
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = link.getAttribute('href');
-                if (document.querySelector(targetId).classList.contains('active')) return;
-                contentPane.classList.add('glitching');
-                setTimeout(() => {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                    sections.forEach(s => s.classList.remove('active'));
-                    document.querySelector(targetId).classList.add('active');
-                    contentPane.scrollTop = 0;
-                    contentPane.classList.remove('glitching');
-                }, 400);
+                showSection(link.getAttribute('href'));
             });
         });
 
-        // 3. --- SPOTLIGHT & CURSOR MOVEMENT ---
+        // 3. --- CURSOR & SPOTLIGHT ---
         const spotlight = document.getElementById('spotlight');
         document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
-            spotlight.style.left = `${mouse.x}px`;
-            spotlight.style.top = `${mouse.y}px`;
-            // --- NEW: Update custom cursor position ---
-            customCursor.style.left = `${mouse.x}px`;
-            customCursor.style.top = `${mouse.y}px`;
+            spotlight.style.transform = `translate(${mouse.x - 400}px, ${mouse.y - 400}px)`;
+            customCursor.style.transform = `translate(${mouse.x - 3}px, ${mouse.y - 3}px)`;
         });
-        
-        // --- NEW: CURSOR CLICK GLITCH ---
-        document.addEventListener('mousedown', () => {
-            customCursor.classList.add('glitching');
-        });
-        document.addEventListener('mouseup', () => {
-            customCursor.classList.remove('glitching');
-        });
-
+        document.addEventListener('mousedown', () => customCursor.classList.add('glitching'));
+        document.addEventListener('mouseup', () => customCursor.classList.remove('glitching'));
 
         // 4. --- INTERACTIVE GRID BACKGROUND ---
+        // This code remains the same as before...
         const canvas = document.getElementById('grid-canvas');
         const ctx = canvas.getContext('2d');
         let dots = [];
         const gridSize = 30;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            createDots();
-        }
-
-        class Dot {
-            constructor(x, y) { this.x = x; this.y = y; this.size = 1; this.baseSize = 1; this.opacity = 0.3; this.baseOpacity = 0.3; }
-            draw() { const currentAccent = getComputedStyle(body).getPropertyValue('--primary-accent').trim(); ctx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.opacity * 100}%, transparent)`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
-            update() {
-                const dx = this.x - mouse.x; const dy = this.y - mouse.y; const dist = Math.sqrt(dx * dx + dy * dy); const maxDist = 150;
-                if (dist < maxDist && mouse.x !== null) { const force = (maxDist - dist) / maxDist; this.opacity = this.baseOpacity + (0.7 * force); this.size = this.baseSize + (2 * force); } 
-                else { this.opacity -= (this.opacity - this.baseOpacity) * 0.05; this.size -= (this.size - this.baseSize) * 0.05; }
-            }
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; createDots(); }
+        class Dot { /* ... Dot class is unchanged ... */ constructor(x, y) { this.x = x; this.y = y; this.size = 1; this.baseSize = 1; this.opacity = 0.3; this.baseOpacity = 0.3; } draw() { const currentAccent = getComputedStyle(body).getPropertyValue('--primary-accent').trim(); ctx.fillStyle = `color-mix(in srgb, ${currentAccent} ${this.opacity * 100}%, transparent)`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } update() { const dx = this.x - mouse.x; const dy = this.y - mouse.y; const dist = Math.sqrt(dx * dx + dy * dy); const maxDist = 150; if (dist < maxDist && mouse.x !== null) { const force = (maxDist - dist) / maxDist; this.opacity = this.baseOpacity + (0.7 * force); this.size = this.baseSize + (2 * force); } else { this.opacity -= (this.opacity - this.baseOpacity) * 0.05; this.size -= (this.size - this.baseSize) * 0.05; } } }
         function createDots() { dots = []; for (let x = 0; x < canvas.width; x += gridSize) { for (let y = 0; y < canvas.height; y += gridSize) { dots.push(new Dot(x + gridSize / 2, y + gridSize / 2)); } } }
         function animateGrid() { ctx.clearRect(0, 0, canvas.width, canvas.height); dots.forEach(dot => { dot.update(); dot.draw(); }); requestAnimationFrame(animateGrid); }
         resizeCanvas();
@@ -343,6 +331,42 @@
             c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, { width: w, height: h } = r, rx = (y / h - 0.5) * -12, ry = (x / w - 0.5) * 12; c.style.transform = `scale(1.03) rotateX(${rx}deg) rotateY(${ry}deg)`; });
             c.addEventListener('mouseleave', () => { c.style.transform = 'scale(1) rotateX(0) rotateY(0)'; });
         });
+
+        // 6. --- NEW: SKILLS SECTION LOGIC ---
+        const skillButtons = document.querySelectorAll('.skill-button');
+        const descriptionPane = document.getElementById('skill-description-pane');
+
+        function typeWriter(element, text, speed = 30) {
+            clearInterval(typeWriterInterval); // Stop any previous typewriter
+            element.innerHTML = '';
+            let i = 0;
+            typeWriterInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typeWriterInterval);
+                }
+            }, speed);
+        }
+
+        skillButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const description = button.getAttribute('data-description');
+                
+                skillButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                typeWriter(descriptionPane, description);
+            });
+        });
+
+        function initializeSkillsSection() {
+            const firstSkillButton = document.querySelector('.skill-button');
+            if (firstSkillButton && !document.querySelector('.skill-button.active')) {
+                firstSkillButton.click();
+            }
+        }
     });
     </script>
 </body>
